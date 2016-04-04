@@ -9,8 +9,8 @@ Commands:
 uname -a
   --> use the website to decypher what you got!
 wget https://dl.dropboxusercontent.com/u/80256631/8188eu-20160305.tar.gz
-tar xzf 8188eu-20160305.tar.gz
-./install.sh
+sudo tar xzf 8188eu-20160305.tar.gz
+sudo ./install.sh
 
 -----------------
 Remote into the Pi.
