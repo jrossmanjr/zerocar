@@ -24,7 +24,7 @@ else
 fi
 
 function update_yo_shit() {
-	#Clear no longer needed files...
+	#updating the distro...
 	echo ":::"
 	echo -n "::: Running an update to your distro"
 	$SUDO apt-get update*
@@ -163,7 +163,7 @@ function edit_dnsmasq() {
 }
 
 function fix_startup() {
-	# restarting
+	# restart the wifi as last function on startup
 	echo ":::"
 	echo -n "::: fixing the wifi at startup"
 	$SUDO cp ~/Downloads/rc.local /etc/rc.local*
