@@ -169,7 +169,7 @@ function fix_startup() {
 	# restart the wifi as last function on startup
 	echo ":::"
 	echo -n "::: fixing the wifi at startup"
-	$SUDO cp ~/Downloads/rc.local /etc/rc.local
+	$SUDO cp rc.local /etc/rc.local
 	echo " DONE!"
 }
 
