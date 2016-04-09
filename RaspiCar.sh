@@ -27,7 +27,7 @@ function update_yo_shit() {
 	#updating the distro...
 	echo ":::"
 	echo -n "::: Running an update to your distro"
-	$SUDO apt-get update*
+	$SUDO apt-get update
 	echo " done!"
 }
 
@@ -35,7 +35,7 @@ function install_samba() {
 	# installing samba server so you can connect and add files easily
 	echo ":::"
 	echo -n "::: Installing Samba"
-	$SUDO apt-get install -y samba samba-common-bin*
+	$SUDO apt-get install -y samba samba-common-bin
 	echo " done!"
 
 }
@@ -46,7 +46,8 @@ function edit_samba() {
 	echo -n "::: Editing Samba"
 	$SUDO cp /etc/samba/smb.conf /etc/samba/smb.conf.bkp
 
-	echo '[Mediadrive]
+	echo '
+  [Mediadrive]
   comment = Public Storage
   path = /
   valid users = @users
@@ -54,7 +55,7 @@ function edit_samba() {
   create mask = 0775
   directory mask = 0775
   read only = no' | sudo tee --append /etc/samba/smb.conf > /dev/null
-  	$SUDO /etc/init.d/samba restart*
+  	$SUDO /etc/init.d/samba restart
 	echo " done!"
 }
 
@@ -62,7 +63,7 @@ function install_minidlna() {
 	# installing minidlna to serve up your shit nicely
 	echo ":::"
 	echo -n "::: Installing minidlna"
-	$SUDO apt-get install -y minidlna*
+	$SUDO apt-get install -y minidlna
 	echo " done!"
 
 }
@@ -87,7 +88,7 @@ function edit_minidlna() {
 	$SUDO cp /etc/minidlna.conf.new /etc/minidlna.conf
 	$SUDO mkdir /home/pi/.minidlna
 	$SUDO chmod 777 /home/pi/.minidlna
-	$SUDO update-rc.d minidlna defaults*
+	$SUDO update-rc.d minidlna defaults
 	echo " done!"
 
 }
@@ -96,7 +97,7 @@ function install_hostapd() {
 	# installing hostapd so it makes the wifi adaper into an access point
 	echo ":::"
 	echo -n "::: Installing hostapd"
-	$SUDO apt-get install -y hostapd*
+	$SUDO apt-get install -y hostapd
 	echo " done!"
 
 }
@@ -106,7 +107,8 @@ function edit_hostapd() {
 	echo ":::"
 	echo -n "::: Editing hostapd"
 	$SUDO cp /etc/default/hostapd /etc/default/hostapd.bkp
-	echo 'DAEMON_CONF="/etc/hostapd/hostapd.conf"' | sudo tee --append /etc/default/hostapd > /dev/null
+	echo '
+DAEMON_CONF="/etc/hostapd/hostapd.conf"' | sudo tee --append /etc/default/hostapd > /dev/null
   	
 	$SUDO cp /etc/network/interfaces /etc/network/interfaces.bkp
   	$SUDO echo 'source-directory /etc/network/interfaces.d
@@ -139,7 +141,7 @@ function edit_hostapd() {
 	auth_algs=3
 	wmm_enabled=1' > /etc/hostapd/hostapd.conf.new
 
-	$SUDO cp /etc/hostapd/hostapd.conf.new /etc/hostapd/hostapd.conf*
+	$SUDO cp /etc/hostapd/hostapd.conf.new /etc/hostapd/hostapd.conf
 	echo " done!"
 }
 
@@ -147,7 +149,7 @@ function install_dnsmasq() {
 	# installing dnsmasq so it can serve up your wifiz
 	echo ":::"
 	echo -n "::: Installing dnsmasq"
-	$SUDO apt-get install -y dnsmasq*
+	$SUDO apt-get install -y dnsmasq
 	echo " done!"
 
 }
@@ -156,8 +158,9 @@ function edit_dnsmasq() {
 	# editing dnsmasq so it can serve up your wifiz
 	echo ":::"
 	echo -n "::: Editing dnsmasq"
-	$SUDO echo '	interface=wlan0
-	dhcp-range=10.0.0.2,10.0.0.9,255.255.255.0,12h' | sudo tee --append /etc/dnsmasq.conf > /dev/null*
+	$SUDO echo '	
+interface=wlan0
+dhcp-range=10.0.0.2,10.0.0.9,255.255.255.0,12h' | sudo tee --append /etc/dnsmasq.conf > /dev/null
 	echo " done!"
 
 }
@@ -166,7 +169,7 @@ function fix_startup() {
 	# restart the wifi as last function on startup
 	echo ":::"
 	echo -n "::: fixing the wifi at startup"
-	$SUDO cp ~/Downloads/rc.local /etc/rc.local*
+	$SUDO cp ~/Downloads/rc.local /etc/rc.local
 	echo " DONE!"
 }
 
@@ -175,7 +178,7 @@ function restart_Pi() {
 	echo ":::"
 	echo -n "::: it is finished... I will now restart!!"
 	$SUDO service hostapd restart && sudo /etc/init.d/dnsmasq restart
-	$SUDO shutdown -r now*
+	$SUDO shutdown -r now
 	echo " DONE!"
 }
 
