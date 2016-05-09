@@ -31,6 +31,16 @@ function update_yo_shit() {
 	echo " done!"
 }
 
+function delete_crap() {
+	# delete all the junk that has nothing to do with being a lightweight server
+	echo ":::"
+	echo -n "::: Removing JUNK...from the trunk"
+	$SUDO apt-get -y remove minecraft-pi python-minecraftpi wolfram-engine sonic-pi
+	$SUDO apt-get -y autoremove
+	$SUDO apt-get purge
+	echo " done!"
+}
+
 function install_samba() {	
 	# installing samba server so you can connect and add files easily
 	echo ":::"
@@ -183,6 +193,7 @@ function restart_Pi() {
 
 
 update_yo_shit
+delete_crap
 install_samba
 edit_samba
 install_minidlna
