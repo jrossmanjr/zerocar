@@ -85,18 +85,20 @@ function edit_minidlna() {
 	echo -n "::: Editing minidlna"
 	$SUDO cp /etc/minidlna.conf /etc/minidlna.conf.bkp
 	$SUDO echo 'user=minidlna 
-		media_dir=V,/home/pi/Videos/
+		media_dir=/home/pi/Videos/
 		db_dir=/home/pi/.minidlna
 		log_dir=/var/log
 		port=8200
-		serial=681019810597110
 		model_name=RaspiCar
 		inotify=yes
-		album_art_names=Cover.jpg/cover.jpg/AlbumArtSmall.jpg/albumartsmall.jpg
-		album_art_names=AlbumArt.jpg/albumart.jpg/Album.jpg/album.jpg
-		album_art_names=Folder.jpg/folder.jpg/Thumb.jpg/thumb.jpg
-		notify_interval=30' > /etc/minidlna.conf.new
-	$SUDO cp /etc/minidlna.conf.new /etc/minidlna.conf
+		enable_tivo=no
+		strict_dlna=no
+		album_art_names=Cover.jpg/cover.jpg/AlbumArtSmall.jpg/albumartsmall.jpg/AlbumArt.jpg/albumart.jpg/Album.jpg/album.jpg/Folder.jpg/folder.jpg/Thumb.jpg/thumb.jpg/movie.tbn
+		presentation_url=http://piratebox.lan
+		notify_interval=900
+		serial=12345678
+		model_number=1
+		root_container=B' > /etc/minidlna.conf
 	$SUDO mkdir /home/pi/.minidlna
 	$SUDO chmod 777 /home/pi/.minidlna
 	$SUDO update-rc.d minidlna defaults
@@ -131,9 +133,7 @@ DAEMON_CONF="/etc/hostapd/hostapd.conf"' | sudo tee --append /etc/default/hostap
 
 	iface wlan0 inet static
   		address 10.0.0.1
-  		netmask 255.255.255.0' > /etc/network/interfaces.new
-	$SUDO cp /etc/network/interfaces.new /etc/network/interfaces
-
+  		netmask 255.255.255.0' > /etc/network/interfaces
 	$SUDO echo 'interface=wlan0
 	#driver=rtl871xdrv
 	driver=nl80211
@@ -148,9 +148,7 @@ DAEMON_CONF="/etc/hostapd/hostapd.conf"' | sudo tee --append /etc/default/hostap
 	rsn_pairwise=CCMP
 	beacon_int=100
 	auth_algs=3
-	wmm_enabled=1' > /etc/hostapd/hostapd.conf.new
-
-	$SUDO cp /etc/hostapd/hostapd.conf.new /etc/hostapd/hostapd.conf
+	wmm_enabled=1' > /etc/hostapd/hostapd.conf
 	echo " done!"
 }
 
@@ -182,6 +180,15 @@ function fix_startup() {
 	echo " DONE!"
 }
 
+function remove_junk() {
+	# removeing the junk from raspbian to make more space
+	echo ":::"
+	echo -n "::: removing stuff you dont need..."
+	$SUDO apt-get -y purge libreoffice wolfram-engine sonic-pi scratch
+	$SUDO apt-get -y autoremove
+	echo " DONE!"
+}
+
 function restart_Pi() {
 	# restarting
 	echo ":::"
@@ -204,4 +211,5 @@ edit_hostapd
 install_dnsmasq
 edit_dnsmasq
 fix_startup
+remove_junk
 restart_Pi
