@@ -36,7 +36,7 @@ function delete_crap() {
 	# delete all the junk that has nothing to do with being a lightweight server
 	echo ":::"
 	echo -n "::: Removing JUNK...from the trunk"
-	$SUDO apt-get -y remove minecraft-pi python-minecraftpi wolfram-engine sonic-pi
+	$SUDO apt-get -y purge minecraft-pi python-minecraftpi wolfram-engine sonic-pi libreoffice scratch
 	$SUDO apt-get -y autoremove
 	$SUDO apt-get purge
 	echo " done!"
@@ -180,13 +180,6 @@ function fix_startup() {
 	echo " DONE!"
 }
 
-function remove_junk() {
-	# removeing the junk from raspbian to make more space
-	echo ":::"
-	echo -n "::: removing stuff you dont need..."
-	$SUDO apt-get -y purge libreoffice wolfram-engine sonic-pi scratch
-	$SUDO apt-get -y autoremove
-	echo " DONE!"
 }
 
 function restart_Pi() {
@@ -211,5 +204,4 @@ edit_hostapd
 install_dnsmasq
 edit_dnsmasq
 fix_startup
-remove_junk
 restart_Pi
