@@ -6,7 +6,7 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 2 of the License, or
 # (at your option) any later version.
-# shoutout to the folks making PiHole for showing me the way and essentially teaching me to code for the Pi...
+# shoutout to the folks making PiHole and PIRATEBOX for showing me the way and essentially teaching me to code for the Pi...
 
 # Run this script as root or under sudo
 echo ":::"
