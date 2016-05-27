@@ -27,34 +27,35 @@ fi
 function update_yo_shit() {
 	#updating the distro...
 	echo ":::"
-	echo -n "::: Running an update to your distro"
+	echo "::: Running an update to your distro"
 	$SUDO apt-get update
-	echo " done!"
+	echo " DONE!"
 }
 
 function delete_crap() {
 	# delete all the junk that has nothing to do with being a lightweight server
 	echo ":::"
-	echo -n "::: Removing JUNK...from the trunk"
+	echo "::: Removing JUNK...from the trunk"
 	$SUDO apt-get -y purge minecraft-pi python-minecraftpi wolfram-engine sonic-pi libreoffice scratch
 	$SUDO apt-get -y autoremove
 	$SUDO apt-get purge
-	echo " done!"
+	echo " DONE!"
 }
 
 function install_samba() {	
 	# installing samba server so you can connect and add files easily
 	echo ":::"
-	echo -n "::: Installing Samba"
+	echo "::: Installing Samba"
 	$SUDO apt-get install -y samba samba-common-bin
-	echo " done!"
-
+	echo " DONE!"
 }
 
 function edit_samba() {	
 	# editing Samba
 	echo ":::"
-	echo -n "::: Editing Samba"
+	echo "::: Editing Samba... "
+	echo "::: You will enter a password for your Folder Share next."
+	$SUDO smbpasswd -a pi
 	$SUDO cp /etc/samba/smb.conf /etc/samba/smb.conf.bkp
 
 	echo '
@@ -69,7 +70,7 @@ function edit_samba() {
    browsable = yes
    guest ok = yes' | sudo tee --append /etc/samba/smb.conf > /dev/null
   	$SUDO /etc/init.d/samba restart
-	echo " done!"
+	echo " DONE!"
 }
 
 function install_minidlna() {	
@@ -77,8 +78,7 @@ function install_minidlna() {
 	echo ":::"
 	echo -n "::: Installing minidlna"
 	$SUDO apt-get install -y minidlna
-	echo " done!"
-
+	echo " DONE!"
 }
 
 function edit_minidlna() {	
@@ -91,7 +91,6 @@ function edit_minidlna() {
 		db_dir=/home/pi/.minidlna
 		log_dir=/var/log
 		port=8200
-		model_name=RaspiCar
 		inotify=yes
 		enable_tivo=no
 		strict_dlna=no
@@ -100,26 +99,28 @@ function edit_minidlna() {
 		serial=12345678
 		model_number=1
 		root_container=B' > /etc/minidlna.conf
+	echo "::: Name the DLNA server: "
+	read var1
+	echo "model_name=$var1" | sudo tee --append /etc/minidlna.conf > /dev/null
+	echo "::: You entered $var1"
 	$SUDO mkdir /home/pi/.minidlna
 	$SUDO chmod 777 /home/pi/.minidlna
 	$SUDO update-rc.d minidlna defaults
-	echo " done!"
-
+	echo " DONE!"
 }
 
 function install_hostapd() {	
 	# installing hostapd so it makes the wifi adaper into an access point
 	echo ":::"
-	echo -n "::: Installing hostapd"
+	echo "::: Installing hostapd"
 	$SUDO apt-get install -y hostapd
-	echo " done!"
-
+	echo " DONE!"
 }
 
 function edit_hostapd() {	
 	# editing hostapd and associated properties
 	echo ":::"
-	echo -n "::: Editing hostapd"
+	echo "::: Editing hostapd"
 	$SUDO cp /etc/default/hostapd /etc/default/hostapd.bkp
 	echo '
 DAEMON_CONF="/etc/hostapd/hostapd.conf"' | sudo tee --append /etc/default/hostapd > /dev/null
@@ -138,45 +139,49 @@ DAEMON_CONF="/etc/hostapd/hostapd.conf"' | sudo tee --append /etc/default/hostap
 	$SUDO echo 'interface=wlan0
 	#driver=rtl871xdrv
 	driver=nl80211
-	ssid=Raspicar
 	hw_mode=g
 	ieee80211n=1
 	channel=1
 	wpa=2
-	wpa_passphrase=RaspiCar1
 	wpa_key_mgmt=WPA-PSK
 	wpa_pairwise=CCMP
 	rsn_pairwise=CCMP
 	beacon_int=100
 	auth_algs=3
 	wme_enabled=1' > /etc/hostapd/hostapd.conf
-	echo " done!"
+	echo "::: Give your WiFi a name: "
+	read var2
+	echo "::: The WiFi will be called:  $var1"
+	echo "::: Set a Password: "
+	read var3
+	echo "::: Password:  $var3"
+	echo "ssid=$var2" | sudo tee --append /etc/hostapd/hostapd.conf > /dev/null
+	echo "wpa_passphrase=$var3" | sudo tee --append /etc/hostapd/hostapd.conf > /dev/null
+	echo " DONE!"
 }
 
 function install_dnsmasq() {	
 	# installing dnsmasq so it can serve up your wifiz
 	echo ":::"
-	echo -n "::: Installing dnsmasq"
+	echo "::: Installing dnsmasq"
 	$SUDO apt-get install -y dnsmasq
-	echo " done!"
-
+	echo " DONE!"
 }
 
 function edit_dnsmasq() {	
 	# editing dnsmasq so it can serve up your wifiz
 	echo ":::"
-	echo -n "::: Editing dnsmasq"
+	echo "::: Editing dnsmasq"
 	$SUDO echo '	
 interface=wlan0
 dhcp-range=10.0.0.2,10.0.0.9,255.255.255.0,12h' | sudo tee --append /etc/dnsmasq.conf > /dev/null
-	echo " done!"
-
+	echo " DONE!"
 }
 
 function fix_startup() {
 	# restart the wifi as last function on startup
 	echo ":::"
-	echo -n "::: fixing the wifi at startup"
+	echo "::: Fixing the wifi at startup"
 	$SUDO cp rc.local /etc/rc.local
 	echo " DONE!"
 }
@@ -186,10 +191,9 @@ function fix_startup() {
 function restart_Pi() {
 	# restarting
 	echo ":::"
-	echo -n "::: it is finished... I will now restart!!"
+	echo "::: It is finished... restarting."
 	$SUDO service hostapd restart && sudo /etc/init.d/dnsmasq restart
 	$SUDO shutdown -r now
-	echo " DONE!"
 }
 
 
