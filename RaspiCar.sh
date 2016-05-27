@@ -186,8 +186,6 @@ function fix_startup() {
 	echo " DONE!"
 }
 
-}
-
 function restart_Pi() {
 	# restarting
 	echo ":::"
