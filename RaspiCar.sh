@@ -59,13 +59,15 @@ function edit_samba() {
 
 	echo '
   [Mediadrive]
-  comment = Public Storage
-  path = /
-  valid users = @users
-  force group = users
-  create mask = 0775
-  directory mask = 0775
-  read only = no' | sudo tee --append /etc/samba/smb.conf > /dev/null
+   comment = Public Storage
+   path = /
+   valid users = @users
+   force group = users
+   create mask = 0775
+   directory mask = 0775
+   read only = no
+   browsable = yes
+   guest ok = yes' | sudo tee --append /etc/samba/smb.conf > /dev/null
   	$SUDO /etc/init.d/samba restart
 	echo " done!"
 }
@@ -93,8 +95,7 @@ function edit_minidlna() {
 		inotify=yes
 		enable_tivo=no
 		strict_dlna=no
-		album_art_names=Cover.jpg/cover.jpg/AlbumArtSmall.jpg/albumartsmall.jpg/AlbumArt.jpg/albumart.jpg/Album.jpg/album.jpg/Folder.jpg/folder.jpg/Thumb.jpg/thumb.jpg/movie.tbn
-		presentation_url=http://piratebox.lan
+		album_art_names=Cover.jpg/cover.jpg/AlbumArtSmall.jpg/albumartsmall.jpg/AlbumArt.jpg/albumart.jpg/Album.jpg/album.jpg/Folder.jpg/folder.jpg/Thumb.jpg/thumb.jpg/movie.tbn/movie.jpg
 		notify_interval=900
 		serial=12345678
 		model_number=1
@@ -140,7 +141,7 @@ DAEMON_CONF="/etc/hostapd/hostapd.conf"' | sudo tee --append /etc/default/hostap
 	ssid=Raspicar
 	hw_mode=g
 	ieee80211n=1
-	channel=8
+	channel=1
 	wpa=2
 	wpa_passphrase=RaspiCar1
 	wpa_key_mgmt=WPA-PSK
@@ -148,7 +149,7 @@ DAEMON_CONF="/etc/hostapd/hostapd.conf"' | sudo tee --append /etc/default/hostap
 	rsn_pairwise=CCMP
 	beacon_int=100
 	auth_algs=3
-	wmm_enabled=1' > /etc/hostapd/hostapd.conf
+	wme_enabled=1' > /etc/hostapd/hostapd.conf
 	echo " done!"
 }
 
