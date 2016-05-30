@@ -42,6 +42,14 @@ function delete_crap() {
 	echo " DONE!"
 }
 
+function upgrade_yo_shit() {
+	#updating the distro...
+	echo ":::"
+	echo "::: Running upgrades"
+	$SUDO apt-get -y upgrade
+	echo " DONE!"
+}
+
 function install_samba() {	
 	# installing samba server so you can connect and add files easily
 	echo ":::"
@@ -198,6 +206,7 @@ function restart_Pi() {
 
 update_yo_shit
 delete_crap
+upgrade_yo_shit
 install_samba
 edit_samba
 install_minidlna
