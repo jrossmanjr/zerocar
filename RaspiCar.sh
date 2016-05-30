@@ -151,7 +151,7 @@ DAEMON_CONF="/etc/hostapd/hostapd.conf"' | sudo tee --append /etc/default/hostap
 	wme_enabled=1' > /etc/hostapd/hostapd.conf
 	echo "::: Give your WiFi a name: "
 	read var2
-	echo "::: The WiFi will be called:  $var1"
+	echo "::: The WiFi will be called:  $var2"
 	echo "::: Set a Password: "
 	read var3
 	echo "::: Password:  $var3"
