@@ -9,7 +9,16 @@
 # shoutout to the folks making PiHole and PIRATEBOX for showing me the way and essentially teaching me to code for the Pi...
 
 # Run this script as root or under sudo
-echo ":::"
+echo ":::
+ ________  _______   ________  ________  ________  ________  ________     
+|\_____  \|\  ___ \ |\   __  \|\   __  \|\   ____\|\   __  \|\   __  \    
+ \|___/  /\ \   __/|\ \  \|\  \ \  \|\  \ \  \___|\ \  \|\  \ \  \|\  \   
+     /  / /\ \  \_|/_\ \   _  _\ \  \\\  \ \  \    \ \   __  \ \   _  _\  
+    /  /_/__\ \  \_|\ \ \  \\  \\ \  \\\  \ \  \____\ \  \ \  \ \  \\  \| 
+   |\________\ \_______\ \__\\ _\\ \_______\ \_______\ \__\ \__\ \__\\ _\ 
+    \|_______|\|_______|\|__|\|__|\|_______|\|_______|\|__|\|__|\|__|\|__|
+    
+    By - jrossmanjr   //   https://github.com/jrossmnajr/ZeroCar             "
 if [[ $EUID -eq 0 ]];then
 	echo "::: You are root."
 else
