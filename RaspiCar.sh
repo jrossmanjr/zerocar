@@ -144,19 +144,17 @@ DAEMON_CONF="/etc/hostapd/hostapd.conf"' | sudo tee --append /etc/default/hostap
 	iface wlan0 inet static
   		address 10.0.0.1
   		netmask 255.255.255.0' > /etc/network/interfaces
-	$SUDO echo 'interface=wlan0
-	#driver=rtl871xdrv
-	driver=nl80211
-	hw_mode=g
-	ieee80211n=1
-	channel=1
-	wpa=2
-	wpa_key_mgmt=WPA-PSK
-	wpa_pairwise=CCMP
-	rsn_pairwise=CCMP
-	beacon_int=100
-	auth_algs=3
-	wme_enabled=1' > /etc/hostapd/hostapd.conf
+	$SUDO echo 'interface=wlan0       # the interface used by the AP
+hw_mode=g             # g simply means 2.4GHz band
+channel=10            # the channel to use
+ieee80211d=1          # limit the frequencies used to those allowed in the country
+country_code=US       # the country code
+ieee80211n=1          # 802.11n support
+wmm_enabled=1         # QoS support
+auth_algs=1           # 1=wpa, 2=wep, 3=both
+wpa=2                 # WPA2 only
+wpa_key_mgmt=WPA-PSK  
+rsn_pairwise=CCMP' > /etc/hostapd/hostapd.conf
 	echo "::: Give your WiFi a name: "
 	read var2
 	echo "::: The WiFi will be called:  $var2"
