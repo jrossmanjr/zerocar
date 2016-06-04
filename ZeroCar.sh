@@ -6,7 +6,8 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 2 of the License, or
 # (at your option) any later version.
-# shoutout to the folks making PiHole and PIRATEBOX for showing me the way and essentially teaching me to code for the Pi...
+# shoutout to the folks making PiHole & PIRATEBOX for showing me the way and essentially teaching me to code for the Pi...
+# thanks to MrEngman for making the wifi installer!! more info: https://www.raspberrypi.org/forums/viewtopic.php?p=462982
 
 # Run this script as root or under sudo
 echo ":::
@@ -56,6 +57,16 @@ function upgrade_yo_shit() {
 	echo ":::"
 	echo "::: Running upgrades"
 	$SUDO apt-get -y upgrade
+	echo " DONE!"
+}
+
+function install_wifi() {	
+	# installing wifi drivers
+	echo ":::"
+	echo "::: Installing wifi drivers"
+	wget https://dl.dropboxusercontent.com/u/80256631/install-wifi.tar.gz
+	tar xzf install-wifi.tar.gz
+	$SUDO ./install-wifi.sh
 	echo " DONE!"
 }
 
@@ -214,6 +225,7 @@ function restart_Pi() {
 update_yo_shit
 delete_crap
 upgrade_yo_shit
+install_wifi
 install_samba
 edit_samba
 install_minidlna
