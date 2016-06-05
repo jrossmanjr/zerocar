@@ -159,8 +159,9 @@ DAEMON_CONF="/etc/hostapd/hostapd.conf"' | sudo tee --append /etc/default/hostap
 auto lo
 iface lo inet loopback
 
-iface eth0 inet manual
+iface eth0 inet dhcp
 
+allow-hotplug wlan0
 iface wlan0 inet static
 address 10.0.0.1
 netmask 255.255.255.0' > /etc/network/interfaces
@@ -253,6 +254,6 @@ install_hostapd
 edit_hostapd
 install_dnsmasq
 edit_dnsmasq
-setup_nat
+#setup_nat
 fix_startup
 restart_Pi
