@@ -251,8 +251,8 @@ install_minidlna
 edit_minidlna
 install_hostapd
 edit_hostapd
-setup_nat
 install_dnsmasq
 edit_dnsmasq
+setup_nat
 fix_startup
 restart_Pi
