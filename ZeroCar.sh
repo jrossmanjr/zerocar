@@ -39,7 +39,7 @@ function update_yo_shit() {
 	echo ":::"
 	echo "::: Running an update to your distro"
 	$SUDO apt-get update
-	echo " DONE!"
+	echo "::: DONE!"
 }
 
 function delete_crap() {
@@ -49,7 +49,7 @@ function delete_crap() {
 	$SUDO apt-get -y purge minecraft-pi python-minecraftpi wolfram-engine sonic-pi libreoffice scratch
 	$SUDO apt-get -y autoremove
 	$SUDO apt-get purge
-	echo " DONE!"
+	echo "::: DONE!"
 }
 
 function upgrade_yo_shit() {
@@ -57,7 +57,7 @@ function upgrade_yo_shit() {
 	echo ":::"
 	echo "::: Running upgrades"
 	$SUDO apt-get -y upgrade
-	echo " DONE!"
+	echo "::: DONE!"
 }
 
 function install_wifi() {	
@@ -67,7 +67,7 @@ function install_wifi() {
 	wget https://dl.dropboxusercontent.com/u/80256631/install-wifi.tar.gz
 	tar xzf install-wifi.tar.gz
 	$SUDO ./install-wifi
-	echo " DONE!"
+	echo "::: DONE!"
 }
 
 function install_samba() {	
@@ -75,7 +75,7 @@ function install_samba() {
 	echo ":::"
 	echo "::: Installing Samba"
 	$SUDO apt-get install -y samba samba-common-bin
-	echo " DONE!"
+	echo "::: DONE!"
 }
 
 function edit_samba() {	
@@ -98,7 +98,7 @@ function edit_samba() {
    browsable = yes
    guest ok = yes' | sudo tee --append /etc/samba/smb.conf > /dev/null
   	$SUDO /etc/init.d/samba restart
-	echo " DONE!"
+	echo "::: DONE!"
 }
 
 function install_minidlna() {	
@@ -106,7 +106,7 @@ function install_minidlna() {
 	echo ":::"
 	echo -n "::: Installing minidlna"
 	$SUDO apt-get install -y minidlna
-	echo " DONE!"
+	echo "::: DONE!"
 }
 
 function edit_minidlna() {	
@@ -134,7 +134,7 @@ function edit_minidlna() {
 	$SUDO mkdir /home/pi/.minidlna
 	$SUDO chmod 777 /home/pi/.minidlna
 	$SUDO update-rc.d minidlna defaults
-	echo " DONE!"
+	echo "::: DONE!"
 }
 
 function install_hostapd() {	
@@ -142,7 +142,7 @@ function install_hostapd() {
 	echo ":::"
 	echo "::: Installing hostapd"
 	$SUDO apt-get install -y hostapd
-	echo " DONE!"
+	echo "::: DONE!"
 }
 
 function edit_hostapd() {	
@@ -163,21 +163,23 @@ iface eth0 inet manual
 iface wlan0 inet static
 address 10.0.0.1
 netmask 255.255.255.0' > /etc/network/interfaces
-	$SUDO echo 'interface=wlan0       				# Sets the interface used by the AP
-driver=nl80211						# Sets the driver for the wifi to a standard
-ctrl_interface=/var/run/Hostapd 	# Tells it to look at hostapd for control
-ctrl_interface_group=0 				# 			
-hw_mode=g            				# g simply means 2.4GHz band
-channel=11            				# the channel to use
-#ieee80211d=1          				# limit the frequencies used to those allowed in the country
-#country_code=US       				# the country code
-ieee80211n=1          				# 802.11n support
-wmm_enabled=1         				# QoS support
-beacon_int=100						# Sets the Beacon interval
-auth_algs=1           				# 1=wpa, 2=wep, 3=both
-wpa=2                 				# WPA2 only
-wpa_key_mgmt=WPA-PSK  				# For WPA passwords
-rsn_pairwise=CCMP					# For WPA passwords' > /etc/hostapd/hostapd.conf
+	$SUDO echo 'interface=wlan0
+driver=nl80211
+ctrl_interface=/var/run/Hostapd
+ctrl_interface_group=0
+hw_mode=g
+channel=1
+#ieee80211d=1
+#country_code=US
+ieee80211n=1
+wmm_enabled=1
+beacon_int=100
+auth_algs=1
+wpa=2
+wpa_key_mgmt=WPA-PSK
+rsn_pairwise=CCMP
+ssid=HondaPi
+wpa_passphrase=airpower1' > /etc/hostapd/hostapd.conf
 	echo ":::"
 	echo "::: Give your WiFi a name: "
 	read var2
@@ -187,7 +189,19 @@ rsn_pairwise=CCMP					# For WPA passwords' > /etc/hostapd/hostapd.conf
 	echo "::: Password:  $var3"
 	echo "ssid=$var2" | sudo tee --append /etc/hostapd/hostapd.conf > /dev/null
 	echo "wpa_passphrase=$var3" | sudo tee --append /etc/hostapd/hostapd.conf > /dev/null
-	echo " DONE!"
+	echo "::: DONE!"
+}
+
+function setup_nat() {
+	#sets up the NAT to allow for a tunnel for mulit users
+	echo ":::"
+	echo "::: Setting up the NAT"
+	echo "net.ipv4.ip_forward=1" | sudo tee --append /etc/sysctl.conf > /dev/null
+	$SUDO sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward"
+	$SUDO iptables -t nat -S
+	$SUDO iptables -S
+	echo "::: DONE!"
+	
 }
 
 function install_dnsmasq() {	
@@ -195,7 +209,7 @@ function install_dnsmasq() {
 	echo ":::"
 	echo "::: Installing dnsmasq"
 	$SUDO apt-get install -y dnsmasq
-	echo " DONE!"
+	echo "::: DONE!"
 }
 
 function edit_dnsmasq() {	
@@ -205,7 +219,7 @@ function edit_dnsmasq() {
 	$SUDO echo '	
 interface=wlan0
 dhcp-range=10.0.0.2,10.0.0.9,255.255.255.0,12h' | sudo tee --append /etc/dnsmasq.conf > /dev/null
-	echo " DONE!"
+	echo "::: DONE!"
 }
 
 function fix_startup() {
@@ -213,14 +227,14 @@ function fix_startup() {
 	echo ":::"
 	echo "::: Fixing the wifi at startup"
 	$SUDO cp rc.local /etc/rc.local
-	echo " DONE!"
+	echo "::: DONE!"
 }
 
 function restart_Pi() {
 	# restarting
 	echo ":::"
 	echo "::: It is finished... restarting."
-	$SUDO service hostapd restart && sudo /etc/init.d/dnsmasq restart
+	$SUDO service hostapd start && sudo /etc/init.d/dnsmasq restart
 	$SUDO shutdown -r now
 }
 
