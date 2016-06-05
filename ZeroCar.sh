@@ -163,17 +163,21 @@ iface eth0 inet manual
 iface wlan0 inet static
 address 10.0.0.1
 netmask 255.255.255.0' > /etc/network/interfaces
-	$SUDO echo 'interface=wlan0       # the interface used by the AP
-hw_mode=g             # g simply means 2.4GHz band
-channel=11            # the channel to use
-#ieee80211d=1          # limit the frequencies used to those allowed in the country
-#country_code=US       # the country code
-ieee80211n=1          # 802.11n support
-wmm_enabled=1         # QoS support
-auth_algs=1           # 1=wpa, 2=wep, 3=both
-wpa=2                 # WPA2 only
-wpa_key_mgmt=WPA-PSK  
-rsn_pairwise=CCMP' > /etc/hostapd/hostapd.conf
+	$SUDO echo 'interface=wlan0       				# Sets the interface used by the AP
+driver=nl80211						# Sets the driver for the wifi to a standard
+ctrl_interface=/var/run/Hostapd 	# Tells it to look at hostapd for control
+ctrl_interface_group=0 				# 			
+hw_mode=g            				# g simply means 2.4GHz band
+channel=11            				# the channel to use
+#ieee80211d=1          				# limit the frequencies used to those allowed in the country
+#country_code=US       				# the country code
+ieee80211n=1          				# 802.11n support
+wmm_enabled=1         				# QoS support
+beacon_int=100						# Sets the Beacon interval
+auth_algs=1           				# 1=wpa, 2=wep, 3=both
+wpa=2                 				# WPA2 only
+wpa_key_mgmt=WPA-PSK  				# For WPA passwords
+rsn_pairwise=CCMP					# For WPA passwords' > /etc/hostapd/hostapd.conf
 	echo ":::"
 	echo "::: Give your WiFi a name: "
 	read var2
