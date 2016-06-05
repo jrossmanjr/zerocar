@@ -250,6 +250,7 @@ install_minidlna
 edit_minidlna
 install_hostapd
 edit_hostapd
+setup_nat
 install_dnsmasq
 edit_dnsmasq
 fix_startup
