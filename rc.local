@@ -20,4 +20,6 @@ if [ "$_IP" ]; then
   printf "My IP address is %s\n" "$_IP"
 fi
 
+sudo service hostapd restart
+
 exit 0
