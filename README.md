@@ -11,7 +11,7 @@ Used to deploy a RaspberryPi Zero DLNA server for in the car/airplane
             USB Ethernet adapter
             Keyboard
             HDMI Monitor -- not necessairly needed ( you can SSH in if you want)
-    
+            
     "Burn" the raspbian image of your choice to the SD card with another computer -- Try Etcher by resin.io -- www.etcher.io/
     
     Install the SD card to the pi and boot
