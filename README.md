@@ -7,6 +7,7 @@ Used to deploy a RaspberryPi Zero DLNA server for in the car/airplane
 -- Setup:
     So how I set this up is to have a Raspberry Pi Zero hooked up to a powered USB hub 
         On that hub have: 
+        
             WiFi dongle you are attempting to use - i usually use a TPLINK TL-WN725N
             USB Ethernet adapter
             Keyboard
