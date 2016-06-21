@@ -9,18 +9,19 @@ Used to deploy a RaspberryPi Zero DLNA server for in the car
             - Keyboard
             - HDMI Monitor -- not necessairly needed ( you can SSH in if you want)
             
-    - "Burn" the raspbian image of your choice to the SD card with another computer -- Try Etcher by resin.io -- www.etcher.io/
+    - "Burn" the raspbian image of your choice to the SD card with another computer
+        - Try Etcher by resin.io -- www.etcher.io/
     
     - Install the SD card to the pi and boot
     
-    - At this point run -- sudo raspi-config
+    - At this point run -- `sudo raspi-config`
         - setup the keyboard in internationalization tools 
     
     - Run -- 
-        'git clone https://github.com/jrossmanjr/ZeroCar.git'
-        'cd ZeroCar/'
-        'chmod +x ZeroCar.sh'
-        './ZeroCar.sh'
+        `git clone https://github.com/jrossmanjr/ZeroCar.git`
+        `cd ZeroCar/`
+        `chmod +x ZeroCar.sh`
+        `sudo ./ZeroCar.sh`
         
     - The installer will prompt you for:
         - SMB Password - so you can connect thru SMB to drop files
