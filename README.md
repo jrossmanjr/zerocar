@@ -18,10 +18,12 @@ Used to deploy a RaspberryPi Zero DLNA server for in the car
         - setup the keyboard in internationalization tools 
     
     - Run -- 
-        `git clone https://github.com/jrossmanjr/ZeroCar.git`
-        `cd ZeroCar/`
-        `chmod +x ZeroCar.sh`
-        `sudo ./ZeroCar.sh`
+        ```
+        git clone https://github.com/jrossmanjr/ZeroCar.git
+        cd ZeroCar/
+        chmod +x ZeroCar.sh
+        sudo ./ZeroCar.sh
+        ```
         
     - The installer will prompt you for:
         - SMB Password - so you can connect thru SMB to drop files
