@@ -39,7 +39,7 @@ function update_yo_shit() {
 	#updating the distro...
 	echo ":::"
 	echo "::: Running an update to your distro"
-	$SUDO apt-get update
+	$SUDO apt update
 	echo "::: DONE!"
 }
 
@@ -47,9 +47,9 @@ function delete_crap() {
 	# delete all the junk that has nothing to do with being a lightweight server
 	echo ":::"
 	echo "::: Removing JUNK...from the trunk"
-	$SUDO apt-get -y purge minecraft-pi python-minecraftpi wolfram-engine sonic-pi libreoffice scratch
-	$SUDO apt-get -y autoremove
-	$SUDO apt-get purge
+	$SUDO apt -y purge minecraft-pi python-minecraftpi wolfram-engine sonic-pi libreoffice scratch
+	$SUDO apt -y autoremove
+	$SUDO apt purge
 	echo "::: DONE!"
 }
 
@@ -57,7 +57,7 @@ function upgrade_yo_shit() {
 	#updating the distro...
 	echo ":::"
 	echo "::: Running upgrades"
-	$SUDO apt-get -y upgrade
+	$SUDO apt -y upgrade
 	echo "::: DONE!"
 }
 
@@ -75,7 +75,7 @@ function install_samba() {
 	# installing samba server so you can connect and add files easily
 	echo ":::"
 	echo "::: Installing Samba"
-	$SUDO apt-get install -y samba samba-common-bin
+	$SUDO apt install -y samba samba-common-bin
 	echo "::: DONE!"
 }
 
@@ -106,7 +106,7 @@ function install_minidlna() {
 	# installing minidlna to serve up your shit nicely
 	echo ":::"
 	echo -n "::: Installing minidlna"
-	$SUDO apt-get install -y minidlna
+	$SUDO apt install -y minidlna
 	echo "::: DONE!"
 }
 
@@ -142,7 +142,7 @@ function install_hostapd() {
 	# installing hostapd so it makes the wifi adaper into an access point
 	echo ":::"
 	echo "::: Installing hostapd"
-	$SUDO apt-get install -y hostapd
+	$SUDO apt install -y hostapd
 	echo "::: DONE!"
 }
 
@@ -210,7 +210,7 @@ function install_dnsmasq() {
 	# installing dnsmasq so it can serve up your wifiz
 	echo ":::"
 	echo "::: Installing dnsmasq"
-	$SUDO apt-get install -y dnsmasq
+	$SUDO apt install -y dnsmasq
 	echo "::: DONE!"
 }
 
