@@ -90,7 +90,7 @@ function edit_samba() {
 	echo '
   [Mediadrive]
    comment = Public Storage
-   path = /
+   path = /home/pi/
    valid users = @users
    force group = users
    create mask = 0775
