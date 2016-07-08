@@ -179,9 +179,7 @@ beacon_int=100
 auth_algs=1
 wpa=2
 wpa_key_mgmt=WPA-PSK
-rsn_pairwise=CCMP
-ssid=HondaPi
-wpa_passphrase=airpower1' > /etc/hostapd/hostapd.conf
+rsn_pairwise=CCMP' > /etc/hostapd/hostapd.conf
 	echo ":::"
 	echo "::: Give your WiFi a name: "
 	read var2
