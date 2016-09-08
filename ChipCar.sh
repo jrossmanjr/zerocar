@@ -7,8 +7,7 @@
 # the Free Software Foundation, either version 2 of the License, or
 # (at your option) any later version.
 # shoutout to the folks making PiHole, Adafruit, & PIRATEBOX for showing me the way and essentially teaching me to code for the Pi...
-# thanks to MrEngman for making the wifi installer!! more info: https://www.raspberrypi.org/forums/viewtopic.php?p=462982
-# alot of help came from ADAFRUIT: https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/install-software
+# alot of help came from the CHIP BBS and this post -- https://slack-files.com/T02GVC9G6-F0H7G3WCT-25e7dfb781
 
 # Run this script as root or under sudo
 echo ":::
