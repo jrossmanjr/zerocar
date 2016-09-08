@@ -1,7 +1,7 @@
 # ZeroCar
 Used to deploy a RaspberryPi Zero DLNA server for in the car
     
-- Setup:
+- Raspberry Pi Setup:
     - So how I set this up is to have a Raspberry Pi Zero hooked up to a powered USB hub 
         - On that hub have: 
             - WiFi dongle you are attempting to use - i usually use a TPLINK TL-WN725N
@@ -24,9 +24,28 @@ Used to deploy a RaspberryPi Zero DLNA server for in the car
         chmod +x ZeroCar.sh
         sudo ./ZeroCar.sh
         ```
+        - Fill in data for the prompts!
+    
+    
+- C.H.I.P. Setup:
+    - Use a powered USB hub and Flash the C.H.I.P. 
+        - TO FLASH -- `http://flash.getchip.com/`
+        - On that hub have: 
+            - Keyboard
+            - VGA/HDMI Monitor
+            
+    - Boot in and connect to your Local WiFi 
+
+    - Run -- 
+        ```
+        git clone https://github.com/jrossmanjr/ZeroCar.git
+        cd ZeroCar/
+        chmod +x ChipCar.sh
+        sudo ./ChipCar.sh
+        ```
         
-    - The installer will prompt you for:
-        - SMB Password - so you can connect thru SMB to drop files
-        - DLNA Server Name - so you can have a cool name in the DLNA browser of choice
-        - SSID Name - Name your WiFi hotspot
-        - SSID Password - give it a password to keep jerks out of your shit
+- The installer for Pi or C.H.I.P. will prompt you for:
+    - SMB Password - so you can connect thru SMB to drop files
+    - DLNA Server Name - so you can have a cool name in the DLNA browser of choice
+    - SSID Name - Name your WiFi hotspot
+    - SSID Password - give it a password to keep jerks out of your shit
