@@ -203,10 +203,19 @@ dhcp-range=10.0.0.2,10.0.0.250,12h' | sudo tee --append /etc/dnsmasq.d/access_po
 }
 
 function install_exfat() {	
-	# installing dnsmasq so it can serve up your wifiz
+	# installing exfat to allow for larger file support
 	echo ":::"
 	echo "::: Installing exfat"
 	$SUDO apt-get install -y exfat-fuse exfat-utils
+	echo "::: DONE!"
+}
+
+function stop_ipv6() {	
+	# stopping ipv6 
+	echo ":::"
+	echo "::: Installing stoping ipv6"
+	$SUDO sysctl -w net.ipv6.conf.all.disable_ipv6=1
+	$SUDO sysctl -w net.ipv6.conf.default.disable_ipv6=1
 	echo "::: DONE!"
 }
 
@@ -234,4 +243,5 @@ edit_hostapd
 install_dnsmasq
 edit_dnsmasq
 install_exfat
+stop_ipv6
 restart_CHIP
