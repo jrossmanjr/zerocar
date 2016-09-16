@@ -93,8 +93,8 @@ function edit_samba() {
    path = /home/pi/
    valid users = @users
    force group = users
-   create mask = 775
-   directory mask = 775
+   create mask = 0775
+   directory mask = 0775
    read only = no
    browsable = yes
    guest ok = yes' | sudo tee --append /etc/samba/smb.conf > /dev/null
