@@ -73,8 +73,8 @@ function edit_samba() {
    path = /home/chip/
    valid users = @users
    force group = users
-   create mask = 777
-   directory mask = 777
+   create mask = 0777
+   directory mask = 0777
    read only = no
    browsable = yes
    guest ok = yes' | sudo tee --append /etc/samba/smb.conf > /dev/null
