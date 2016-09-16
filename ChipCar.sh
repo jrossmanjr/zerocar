@@ -78,6 +78,7 @@ function edit_samba() {
    read only = no
    browsable = yes
    guest ok = yes' | sudo tee --append /etc/samba/smb.conf > /dev/null
+  	$SUDO chmod -R 777 /home/chip/
   	$SUDO /etc/init.d/samba restart
 	echo "::: DONE!"
 }
