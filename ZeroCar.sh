@@ -48,8 +48,8 @@ function delete_crap() {
 	echo ":::"
 	echo "::: Removing JUNK...from the trunk"
 	$SUDO apt -y purge minecraft-pi python-minecraftpi wolfram-engine sonic-pi libreoffice scratch
-	$SUDO apt -y autoremove
-	$SUDO apt purge
+	$SUDO apt-get autoremove
+	$SUDO apt-get purge
 	echo "::: DONE!"
 }
 
