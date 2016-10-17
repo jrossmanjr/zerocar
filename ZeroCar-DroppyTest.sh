@@ -101,8 +101,7 @@ function edit_samba() {
    read only = no
    browsable = yes
    guest ok = yes' | sudo tee --append /etc/samba/smb.conf > /dev/null
-    $SUDO chmod -R 777 /home/pi/
-    $SUDO /etc/init.d/samba restart
+  $SUDO /etc/init.d/samba restart
   echo "::: DONE!"
 }
 
@@ -136,8 +135,8 @@ function edit_minidlna() {
   read var1
   echo "model_name=$var1" | sudo tee --append /etc/minidlna.conf > /dev/null
   echo "::: You entered $var1"
-  $SUDO mkdir /home/pi/.minidlna
-  $SUDO chmod 777 /home/pi/.minidlna
+  $SUDO mkdir /home/pi/minidlna
+  $SUDO chmod -R 777 /home/pi/
   $SUDO update-rc.d minidlna defaults
   echo "::: DONE!"
 }
