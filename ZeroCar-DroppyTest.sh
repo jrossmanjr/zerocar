@@ -217,7 +217,7 @@ function install_droppy() {
   # update Node.js, NPM and install droppy to allow for web file serving
   echo ":::"
   echo "::: It is finished... restarting."
-  $SUDO apt intstall -y node npm
+  $SUDO apt-get intstall -y node npm
   $SUDO npm cache clean -f && sudo npm install -g n
   $SUDO n stable
   $SUDO npm install -g droppy
