@@ -88,6 +88,7 @@ function edit_samba() {
   echo "::: You will enter a password for your Folder Share next."
   $SUDO smbpasswd -a pi
   $SUDO cp /etc/samba/smb.conf /etc/samba/smb.conf.bkp
+  $SUDO mkdir /home/pi/Videos
 
   echo '
   [Mediadrive]
@@ -120,7 +121,7 @@ function edit_minidlna() {
   $SUDO cp /etc/minidlna.conf /etc/minidlna.conf.bkp
   $SUDO echo 'user=minidlna 
     media_dir=/home/pi/Videos/
-    db_dir=/home/pi/.minidlna
+    db_dir=/home/pi/minidlna
     log_dir=/var/log
     port=8200
     inotify=yes
@@ -216,7 +217,7 @@ dhcp-range=10.0.0.2,10.0.0.9,255.255.255.0,12h' | sudo tee --append /etc/dnsmasq
 function install_droppy() {
   # update Node.js, NPM and install droppy to allow for web file serving
   echo ":::"
-  echo "::: It is finished... restarting."
+  echo "::: Installing NODE, NPM, N and Droppy"
   $SUDO apt-get intstall -y node npm
   $SUDO npm cache clean -f && sudo npm install -g n
   $SUDO n stable
@@ -234,9 +235,10 @@ function fix_startup() {
 function restart_Pi() {
   # restarting
   echo ":::"
-  echo "::: It is finished... restarting."
+  echo "::: It is finished..."
   $SUDO service hostapd start && sudo /etc/init.d/dnsmasq restart
-  $SUDO shutdown -r now
+  echo "::: please restart the Pi. -- suggest sudo shutdown -r now"
+  
 }
 
 
