@@ -230,6 +230,14 @@ function install_droppy() {
   $SUDO npm install -g droppy
 }
 
+function fix_startup() {
+  # restart the wifi as last function on startup
+  echo ":::"
+  echo "::: Fixing the wifi at startup"
+  $SUDO cp chip.local /etc/rc.local
+  echo "::: DONE!"
+}
+
 function restart_CHIP() {
 	# restarting
 	echo ":::"
@@ -256,4 +264,5 @@ edit_dnsmasq
 install_exfat
 stop_ipv6
 install_droppy
+fix_startup
 restart_CHIP
