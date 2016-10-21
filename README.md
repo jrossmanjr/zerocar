@@ -49,3 +49,7 @@ Used to deploy a RaspberryPi Zero DLNA server for in the car
     - DLNA Server Name - so you can have a cool name in the DLNA browser of choice
     - SSID Name - Name your WiFi hotspot
     - SSID Password - give it a password to keep jerks out of your shit
+
+- Access Droppy
+    - after the first reboot go to ``` 10.0.0.1:8989 ``` to access the Droppy interface
+    - drop in files!
