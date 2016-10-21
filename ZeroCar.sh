@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# RaspiCar Install Script
-# (c) 2016 by Load
+# ZeroCar Install Script
+# (c) 2016 by jrossmanjr
 # Use a RaspberryPi as a WiFi hotspot to serve up files
 # RaspiCar is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
