@@ -78,7 +78,6 @@ function edit_samba() {
    read only = no
    browsable = yes
    guest ok = yes' | sudo tee --append /etc/samba/smb.conf > /dev/null
-  	$SUDO chmod -R 777 /home/chip/
   	$SUDO /etc/init.d/samba restart
 	echo "::: DONE!"
 }
@@ -98,7 +97,7 @@ function edit_minidlna() {
 	$SUDO cp /etc/minidlna.conf /etc/minidlna.conf.bkp
 	$SUDO echo 'user=minidlna 
 		media_dir=/home/chip/Videos/
-		db_dir=/home/chip/.minidlna
+		db_dir=/home/chip/minidlna
 		log_dir=/var/log
 		port=8200
 		inotify=yes
@@ -113,8 +112,9 @@ function edit_minidlna() {
 	read var1
 	echo "model_name=$var1" | sudo tee --append /etc/minidlna.conf > /dev/null
 	echo "::: You entered $var1"
-	$SUDO mkdir /home/chip/.minidlna
-	$SUDO chmod 777 /home/chip/.minidlna
+	$SUDO mkdir /home/chip/minidlna
+	$SUDO mkdir /home/chip/Videos
+	$SUDO chmod -R 777 /home/chip/
 	$SUDO update-rc.d minidlna defaults
 	echo "::: DONE!"
 }
@@ -220,6 +220,16 @@ function stop_ipv6() {
 	echo "::: DONE!"
 }
 
+function install_droppy() {
+  # update Node.js, NPM and install droppy to allow for web file serving
+  echo ":::"
+  echo "::: Installing NODE, NPM, N and Droppy"
+  $SUDO apt-get intstall -y node npm
+  $SUDO npm cache clean -f && sudo npm install -g n
+  $SUDO n stable
+  $SUDO npm install -g droppy
+}
+
 function restart_CHIP() {
 	# restarting
 	echo ":::"
@@ -245,4 +255,5 @@ install_dnsmasq
 edit_dnsmasq
 install_exfat
 stop_ipv6
+install_droppy
 restart_CHIP
