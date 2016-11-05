@@ -50,9 +50,9 @@ else
   fi
 fi
 
-whiptail --msgbox --backtitle "Welcome" --title "ZeroCar automated installer" "\n\nThis installer turns your Raspberry Pi and Wifi Dongle into" "\n\nan awesome WiFi router and media streamer!" ${r} ${c}
+whiptail --msgbox --title "ZeroCar automated installer" "\nThis installer turns your Raspberry Pi and Wifi Dongle into \nan awesome WiFi router and media streamer!" ${r} ${c}
 
-whiptail --msgbox --backtitle "Welcome" --title "First things first... Lets setup some variables!" ${r} ${c}
+whiptail --msgbox --title "ZeroCar automated installer" "\n\nFirst things first... Lets setup some variables!" ${r} ${c}
 
 var1=$(whiptail --inputbox "Name the DLNA Server" ${r} ${c} ZeroCar --title "DLNA Name" 3>&1 1>&2 2>&3)
 
@@ -60,7 +60,7 @@ var2=$(whiptail --inputbox "Name the WiFi" ${r} ${c} ZeroCar --title "Wifi Name"
 
 var3=$(whiptail --passwordbox "Please enter a password for the WiFi" ${r} ${c} --title "WiFi Password" 3>&1 1>&2 2>&3)
 
-whiptail --msgbox --backtitle "Welcome" --title "Ok all the data has been entered..." "\n\nThe install will now complete!" ${r} ${c}
+whiptail --msgbox --title "ZeroCar automated installer" "\n\nOk all the data has been entered...The install will now complete!" ${r} ${c}
 
 
 function update_yo_shit() {
