@@ -221,7 +221,7 @@ dhcp-range=10.0.0.2,10.0.0.250,12h' | sudo tee --append /etc/dnsmasq.d/access_po
 function install_exfat() {	
 	# installing exfat (to allow for larger file support), automount, and simlinking a usb drive to 'Videos' folder
 	echo ":::"
-	echo "::: Installing exfat"
+	echo "::: Installing exfat, usbmount, and simlinking"
 	$SUDO apt-get install usbmount
 	$SUDO apt-get install -y exfat-fuse exfat-utils
 	$SUDO cp usbmount.conf /etc/usbmount/usbmount.conf
