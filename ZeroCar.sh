@@ -229,6 +229,17 @@ dhcp-range=10.0.0.2,10.0.0.9,255.255.255.0,12h' | sudo tee --append /etc/dnsmasq
   echo "::: DONE!"
 }
 
+function install_exfat() {	
+	# installing exfat (to allow for larger file support), automount, and simlinking a usb drive to 'Videos' folder
+	echo ":::"
+	echo "::: Installing exfat, usbmount, and simlinking Videos"
+	$SUDO apt-get install usbmount
+	$SUDO apt-get install -y exfat-fuse exfat-utils
+	$SUDO cp usbmount.conf /etc/usbmount/usbmount.conf
+	$SUDO ln -s /media/usb0 /home/pi/Videos
+	echo "::: DONE!"
+}
+
 function install_droppy() {
   # update Node.js, NPM and install droppy to allow for web file serving
   echo ":::"
@@ -270,6 +281,7 @@ install_hostapd
 edit_hostapd
 install_dnsmasq
 edit_dnsmasq
+#install_exfat
 install_droppy
 fix_startup
 restart_Pi
