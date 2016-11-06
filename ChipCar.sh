@@ -223,7 +223,7 @@ function install_usbmount() {
 	echo ":::"
 	echo "::: Installing usbmount and simlinking"
 	$SUDO apt-get install usbmount
-	$SUDO cp usbmount.conf /etc/usbmount/usbmount.conf
+	$SUDO cp usbmount_CHIP.conf /etc/usbmount/usbmount.conf
 	$SUDO ln -s /media/usb0 /home/chip/Videos
 	echo "::: DONE!"
 }
