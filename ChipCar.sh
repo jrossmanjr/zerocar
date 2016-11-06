@@ -22,19 +22,43 @@ echo ":::
 
     
     By - jrossmanjr   //   https://github.com/jrossmnajr/ZeroCar             "
+# Find the rows and columns will default to 80x24 is it can not be detected
+screen_size=$(stty size 2>/dev/null || echo 24 80) 
+rows=$(echo $screen_size | awk '{print $1}')
+columns=$(echo $screen_size | awk '{print $2}')
+
+# Divide by two so the dialogs take up half of the screen, which looks nice.
+r=$(( rows / 2 ))
+c=$(( columns / 2 ))
+# Unless the screen is tiny
+r=$(( r < 20 ? 20 : r ))
+c=$(( c < 70 ? 70 : c ))
+
 if [[ $EUID -eq 0 ]];then
-	echo "::: You are root."
+  echo "::: You are root."
 else
-	echo "::: sudo will be used."
+  echo "::: sudo will be used."
   # Check if it is actually installed
   # If it isn't, exit because the install cannot complete
   if [[ $(dpkg-query -s sudo) ]];then
-		export SUDO="sudo"
+    export SUDO="sudo"
   else
-		echo "::: Please install sudo or run this script as root."
+    echo "::: Please install sudo or run this script as root."
     exit 1
   fi
 fi
+
+whiptail --msgbox --title "ZeroCar automated installer" "\nThis installer turns your C.H.I.P. into \nan awesome WiFi router and media streamer!" ${r} ${c}
+
+whiptail --msgbox --title "ZeroCar automated installer" "\n\nFirst things first... Lets setup some variables!" ${r} ${c}
+
+var1=$(whiptail --inputbox "Name the DLNA Server" ${r} ${c} ZeroCar --title "DLNA Name" 3>&1 1>&2 2>&3)
+
+var2=$(whiptail --inputbox "Name the WiFi" ${r} ${c} ZeroCar --title "Wifi Name" 3>&1 1>&2 2>&3)
+
+var3=$(whiptail --passwordbox "Please enter a password for the WiFi" ${r} ${c} --title "WiFi Password" 3>&1 1>&2 2>&3)
+
+whiptail --msgbox --title "ZeroCar automated installer" "\n\nOk all the data has been entered...The install will now complete!" ${r} ${c}
 
 function update_yo_shit() {
 	#updating the distro...
@@ -109,10 +133,7 @@ function edit_minidlna() {
 		serial=12345678
 		model_number=1
 		root_container=B' > /etc/minidlna.conf
-	echo "::: Name the DLNA server: "
-	read var1
 	echo "model_name=$var1" | sudo tee --append /etc/minidlna.conf > /dev/null
-	echo "::: You entered $var1"
 	$SUDO mkdir /home/chip/minidlna
 	$SUDO mkdir /home/chip/Videos
 	$SUDO chmod -R 777 /home/chip/
@@ -160,13 +181,6 @@ auth_algs=1
 wpa=2
 wpa_key_mgmt=WPA-PSK
 rsn_pairwise=CCMP' > /etc/hostapd.conf
-	echo ":::"
-	echo "::: Give your WiFi a name: "
-	read var2
-	echo "::: The WiFi will be called:  $var2"
-	echo "::: Set a Password: "
-	read var3
-	echo "::: Password:  $var3"
 	echo "ssid=$var2" | sudo tee --append /etc/hostapd.conf > /dev/null
 	echo "wpa_passphrase=$var3" | sudo tee --append /etc/hostapd.conf > /dev/null
 	$SUDO echo '[Unit]
@@ -205,10 +219,13 @@ dhcp-range=10.0.0.2,10.0.0.250,12h' | sudo tee --append /etc/dnsmasq.d/access_po
 }
 
 function install_exfat() {	
-	# installing exfat to allow for larger file support
+	# installing exfat (to allow for larger file support), automount, and simlinking a usb drive to 'Videos' folder
 	echo ":::"
 	echo "::: Installing exfat"
+	$SUDO apt-get install usbmount
 	$SUDO apt-get install -y exfat-fuse exfat-utils
+	$SUDO cp usbmount.conf /etc/usbmount/usbmount.conf
+	$SUDO ln -s /media/usb0 /home/chip/Videos
 	echo "::: DONE!"
 }
 
