@@ -5,10 +5,10 @@ Used to deploy a RaspberryPi Zero DLNA server for in the car
     - So how I set this up is to have a Raspberry Pi Zero hooked up to a USB hub
         - I like the UUGear one http://www.uugear.com/product/zero4u/ or https://www.adafruit.com/products/3298
         - On that hub have: 
-            - WiFi dongle you are attempting to use - i usually use a TPLINK TL-WN725N
+            - WiFi dongle you are attempting to use - I usually use a TPLINK TL-WN725N
             - USB Ethernet adapter
             - Keyboard
-            - HDMI Monitor -- not necessairly needed ( you can SSH in if you want)
+            - HDMI Monitor -- not necessairly needed (you can SSH in if you want)
             
     - "Burn" the raspbian image of your choice to the SD card with another computer
         - Try Etcher by resin.io -- www.etcher.io
