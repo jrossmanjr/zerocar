@@ -61,6 +61,7 @@ function install_wifi() {
   wget https://dl.dropboxusercontent.com/u/80256631/install-wifi.tar.gz
   tar xzf install-wifi.tar.gz
   $SUDO ./install-wifi
+  $SUDO ln -s /etc/hostapd/hostapd.conf /home/pi/hostapd.conf
   echo "::: DONE!"
 }
 
