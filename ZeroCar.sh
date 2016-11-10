@@ -208,6 +208,7 @@ wpa_key_mgmt=WPA-PSK
 rsn_pairwise=CCMP' > /etc/hostapd/hostapd.conf
   echo "ssid=$var2" | sudo tee --append /etc/hostapd/hostapd.conf > /dev/null
   echo "wpa_passphrase=$var3" | sudo tee --append /etc/hostapd/hostapd.conf > /dev/null
+  $SUDO ln -s /etc/hostapd/hostapd.conf /home/pi/hostapd.conf
   echo "::: DONE!"
 }
 
