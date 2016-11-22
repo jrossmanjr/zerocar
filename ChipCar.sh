@@ -222,7 +222,7 @@ function install_usbmount() {
 	# installing usb automount, and simlinking a usb drive to 'Videos' folder
 	echo ":::"
 	echo "::: Installing usbmount and simlinking"
-	$SUDO apt-get install usbmount
+	$SUDO apt-get -y install usbmount cryptsetup 
 	$SUDO cp usbmount_CHIP.conf /etc/usbmount/usbmount.conf
 	$SUDO ln -s /media/usb0 /home/chip/Videos
 	echo "::: DONE!"
