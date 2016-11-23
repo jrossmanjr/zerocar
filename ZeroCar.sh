@@ -235,7 +235,7 @@ function install_exfat() {
 	echo ":::"
 	echo "::: Installing exfat, ntfs, usbmount, and simlinking Videos"
 	$SUDO apt-get install -y usbmount
-	$SUDO apt-get install -y ntfs-3g exfat-fuse exfat-utils cryptsetup
+	$SUDO apt-get install -y ntfs-3g exfat-fuse exfat-utils cryptsetup hfsprogs
 	$SUDO cp usbmount_Pi.conf /etc/usbmount/usbmount.conf
 	$SUDO ln -s /media/usb0 /home/pi/Videos
 	echo "::: DONE!"
