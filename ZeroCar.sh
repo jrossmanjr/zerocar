@@ -273,7 +273,6 @@ function restart_Pi() {
 update_yo_shit
 delete_crap
 upgrade_yo_shit
-install_wifi
 install_samba
 edit_samba
 install_minidlna
@@ -285,5 +284,6 @@ edit_dnsmasq
 #install_exfat
 install_droppy
 fix_startup
+install_wifi
 restart_Pi
   
