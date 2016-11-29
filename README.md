@@ -54,3 +54,15 @@ Used to deploy a RaspberryPi Zero DLNA server for in the car
 - Access Droppy
     - after the first reboot go to ``` 10.0.0.1:8989 ``` to access the Droppy interface
     - drop in files!
+    
+PARTS LIST!
+- Raspberry Pi Zero ```https://www.adafruit.com/product/2885 ```
+- Zero4U ``` https://www.adafruit.com/product/3298 or http://www.uugear.com/product/zero4u/ ```
+- Micro SD - 8gb or bigger if you want the files directly on the server
+- WiFi module TPLINK TL-WN725N ``` https://www.amazon.com/TP-Link-N150-Wireless-Adapter-TL-WN725N/dp/B008IFXQFU ```
+- USB Drives - if you want to use the thumb drive technique - just get a big one for all your shows and movies
+EXTRA - for setup
+- Keyboard
+- Monitor 
+- Mini HDMI adapter ``` https://www.amazon.com/Cablelera-Female-Adapter-Black-ZA5100FM/dp/B011ESUXZI/ ```
+- USB Ethernet ``` https://www.amazon.com/AmazonBasics-USB-Ethernet-Network-Adapter/dp/B00M77HLII/ ```
