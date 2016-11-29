@@ -55,6 +55,8 @@ Used to deploy a RaspberryPi Zero DLNA server for in the car
     - after the first reboot go to ``` 10.0.0.1:8989 ``` to access the Droppy interface
     - drop in files!
     
+-------------------------------------------------------------------------------------------------------------------------
+
 PARTS LIST!
 - Raspberry Pi Zero ```https://www.adafruit.com/product/2885 ```
 - Zero4U ``` https://www.adafruit.com/product/3298 or http://www.uugear.com/product/zero4u/ ```
