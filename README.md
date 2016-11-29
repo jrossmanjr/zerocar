@@ -61,6 +61,7 @@ PARTS LIST!
 - Micro SD - 8gb or bigger if you want the files directly on the server
 - WiFi module TPLINK TL-WN725N ``` https://www.amazon.com/TP-Link-N150-Wireless-Adapter-TL-WN725N/dp/B008IFXQFU ```
 - USB Drives - if you want to use the thumb drive technique - just get a big one for all your shows and movies
+
 EXTRA - for setup
 - Keyboard
 - Monitor 
