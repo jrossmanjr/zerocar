@@ -57,12 +57,16 @@ Used to deploy a RaspberryPi Zero DLNA server for in the car
     
 -------------------------------------------------------------------------------------------------------------------------
 
-PARTS LIST!
+Raspberry Pi PARTS LIST!
 - Raspberry Pi Zero ```https://www.adafruit.com/product/2885 ```
 - Zero4U ``` https://www.adafruit.com/product/3298 or http://www.uugear.com/product/zero4u/ ```
 - Micro SD - 8gb or bigger if you want the files directly on the server
 - WiFi module TPLINK TL-WN725N ``` https://www.amazon.com/TP-Link-N150-Wireless-Adapter-TL-WN725N/dp/B008IFXQFU ```
-- USB Drives - if you want to use the thumb drive technique - just get a big one for all your shows and movies
+- USB Drives - if you want to use the thumb drive technique - just get a big one for all your shows and movies (~128 GB)
+
+C.H.I.P. PARTS LIST!
+- Next Thing Co C.H.I.P. ```https://getchip.com/ ```
+- USB Drives - just get a big one for all your shows and movies (~128 GB)
 
 EXTRA - for setup
 - Keyboard
