@@ -51,7 +51,7 @@ Used to deploy a RaspberryPi Zero DLNA server for in the car
     - SSID Name - Name your WiFi hotspot
     - SSID Password - give it a password to keep jerks out of your shit
 
-- Access Droppy
+- Access Droppy (Droppy info: https://github.com/silverwind/droppy )
     - after the first reboot go to ``` 10.0.0.1:8989 ``` to access the Droppy interface
     - drop in files!
     
