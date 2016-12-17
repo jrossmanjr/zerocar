@@ -251,6 +251,7 @@ function fix_startup() {
   # restart the wifi as last function on startup
   echo ":::"
   echo "::: Fixing the wifi at startup"
+  &SUDO apt-get install -y wireless-tools
   $SUDO cp chip.local /etc/rc.local
   $SUDO chmod +x /etc/rc.local
   echo "::: DONE!"
