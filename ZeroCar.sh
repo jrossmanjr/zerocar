@@ -256,6 +256,7 @@ function fix_startup() {
   echo ":::"
   echo "::: Fixing the wifi at startup"
   $SUDO cp rc.local /etc/rc.local
+  $SUDO chmod +x /etc/rc.local
   echo "::: DONE!"
 }
 
