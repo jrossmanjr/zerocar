@@ -22,6 +22,6 @@ fi
 
 sudo service hostapd restart
 
-sudo droppy start -c /srv/droppy/config -f /home/pi/ &
+sudo droppy start -d -c /srv/droppy/config -f /home/pi/ &
 
 exit 0
