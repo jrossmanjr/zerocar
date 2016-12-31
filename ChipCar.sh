@@ -221,10 +221,8 @@ dhcp-range=10.0.0.2,10.0.0.250,12h' | sudo tee --append /etc/dnsmasq.d/access_po
 function install_usbmount() {	
 	# installing usb automount, and simlinking a usb drive to 'Videos' folder
 	echo ":::"
-	echo "::: Installing usbmount and simlinking"
-	$SUDO apt-get -y install usbmount cryptsetup hfsprogs
-	$SUDO cp usbmount_CHIP.conf /etc/usbmount/usbmount.conf
-	$SUDO ln -s /media/usb0 /home/chip/Videos
+	echo "::: Installing usb drive format support"
+	$SUDO apt-get -y install cryptsetup hfsprogs ntfs-3g exfat exfat-utils
 	echo "::: DONE!"
 }
 
