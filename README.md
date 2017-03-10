@@ -2,10 +2,10 @@
 Used to deploy a RaspberryPi Zero DLNA server for in the car
     
 - Raspberry Pi Setup:
-    - So how I set this up is to have a Raspberry Pi Zero hooked up to a USB hub
+    - So how I set this up is to have a Raspberry Pi Zero or Zero W hooked up to a USB hub
         - I like the UUGear one http://www.uugear.com/product/zero4u/ or https://www.adafruit.com/products/3298
         - On that hub have: 
-            - WiFi dongle you are attempting to use - I usually use a TPLINK TL-WN725N
+            - WiFi dongle you are attempting to use - I usually use a TPLINK TL-WN725N (not needed if you have the wireless zero)
             - USB Ethernet adapter
             - Keyboard
             - HDMI Monitor -- not necessairly needed (you can SSH in if you want)
