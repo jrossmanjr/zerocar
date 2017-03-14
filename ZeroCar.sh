@@ -29,7 +29,7 @@ screen_size=$(stty size 2>/dev/null || echo 24 80)
 rows=$(echo $screen_size | awk '{print $1}')
 columns=$(echo $screen_size | awk '{print $2}')
 
-# Divide by two so the dialogs take up half of the screen, which looks nice.
+# Divide by two so the dialogues take up half of the screen, which looks nice.
 r=$(( rows / 2 ))
 c=$(( columns / 2 ))
 # Unless the screen is tiny
@@ -52,16 +52,34 @@ fi
 
 whiptail --msgbox --title "ZeroCar automated installer" "\nThis installer turns your Raspberry Pi and Wifi Dongle into \nan awesome WiFi router and media streamer!" ${r} ${c}
 
-whiptail --msgbox --title "ZeroCar automated installer" "\n\nFirst things first... Lets setup some variables!" ${r} ${c}
+whiptail --msgbox --title "ZeroCar automated installer" "\n\nFirst things first... Lets set up some variables!" ${r} ${c}
 
 var1=$(whiptail --inputbox "Name the DLNA Server" ${r} ${c} ZeroCar --title "DLNA Name" 3>&1 1>&2 2>&3)
 
-var2=$(whiptail --inputbox "Name the WiFi" ${r} ${c} ZeroCar --title "Wifi Name" 3>&1 1>&2 2>&3)
+var9=$(whiptail --title "What you rocking under the hood?" --radiolist "How many WiFi adapters are you running?" ${r} ${c} 2 \
+"One" "One Adapter" ON \
+"Two" "Two Adapters" OFF 3>&1 1>&2 2>&3)
 
-var3=$(whiptail --passwordbox "Please enter a password for the WiFi" ${r} ${c} --title "WiFi Password" 3>&1 1>&2 2>&3)
+exitstatus=$?
+if [ $exitstatus = 0 ]; then
+    echo "The chosen distro is:" $var9
+else
+    echo "You chose Cancel."
+fi
+
+
+if [ $varw = Two ]; then
+	var2=$(whiptail --inputbox "Name the WiFi Hotspot" ${r} ${c} ZeroCar --title "Wifi Name" 3>&1 1>&2 2>&3)
+	var3=$(whiptail --passwordbox "Please enter a password for the WiFi hotspot" ${r} ${c} --title "WiFi Password" 3>&1 1>&2 2>&3)
+	var4=$(whiptail --inputbox "What WiFi to connect to" ${r} ${c} HomeRouter --title "Router Name" 3>&1 1>&2 2>&3)
+	var5=$(whiptail --passwordbox "Please enter a password for your Home Router" ${r} ${c} --title "Router Password" 3>&1 1>&2 2>&3)
+else
+	var2=$(whiptail --inputbox "Name the WiFi Hotspot" ${r} ${c} ZeroCar --title "Wifi Name" 3>&1 1>&2 2>&3)
+	var3=$(whiptail --passwordbox "Please enter a password for the WiFi Hotspot" ${r} ${c} --title "WiFi Password" 3>&1 1>&2 2>&3)
+fi
 
 whiptail --msgbox --title "ZeroCar automated installer" "\n\nOk all the data has been entered...The install will now complete!" ${r} ${c}
-
+ 
 
 function update_yo_shit() {
   #updating the distro...
@@ -93,18 +111,42 @@ function install_wifi() {
   # installing wifi drivers
   echo ":::"
   echo "::: Installing wifi drivers"
+  $SUDO chmod -R 777 /home/pi/
   wget https://dl.dropboxusercontent.com/u/80256631/install-wifi.tar.gz
   tar xzf install-wifi.tar.gz
   $SUDO ./install-wifi
   echo "::: DONE!"
 }
 
-function install_samba() {  
+function install_the_things() {
   # installing samba server so you can connect and add files easily
   echo ":::"
   echo "::: Installing Samba"
   $SUDO apt install -y samba samba-common-bin
   echo "::: DONE!"
+  # installing minidlna to serve up your shit nicely
+  echo ":::"
+  echo "::: Installing minidlna"
+  $SUDO apt install -y minidlna
+  echo "::: DONE!"
+  # installing hostapd so it makes the wifi adaper into an access point
+  echo ":::"
+  echo "::: Installing hostapd"
+  $SUDO apt install -y hostapd
+  echo "::: DONE!"
+  # installing dnsmasq so it can serve up your wifiz
+  echo ":::"
+  echo "::: Installing dnsmasq"
+  $SUDO apt install -y dnsmasq
+  echo "::: DONE!"
+  # update Node.js, NPM and install Droppy to allow for web file serving
+  echo ":::"
+  echo "::: Installing NODE, NPM, N and Droppy"
+  $SUDO apt-get install -y node npm
+  $SUDO npm cache clean -f && sudo npm install -g n
+  $SUDO n stable
+  $SUDO npm install -g droppy
+  echo "::: DONE installing all the things!"
 }
 
 function edit_samba() { 
@@ -131,14 +173,6 @@ function edit_samba() {
   echo "::: DONE!"
 }
 
-function install_minidlna() { 
-  # installing minidlna to serve up your shit nicely
-  echo ":::"
-  echo -n "::: Installing minidlna"
-  $SUDO apt install -y minidlna
-  echo "::: DONE!"
-}
-
 function edit_minidlna() {  
   # editing minidlna
   echo ":::"
@@ -159,16 +193,7 @@ function edit_minidlna() {
     root_container=B' > /etc/minidlna.conf
   echo "model_name=$var1" | sudo tee --append /etc/minidlna.conf > /dev/null
   $SUDO mkdir /home/pi/minidlna
-  $SUDO chmod -R 777 /home/pi/
   $SUDO update-rc.d minidlna defaults
-  echo "::: DONE!"
-}
-
-function install_hostapd() {  
-  # installing hostapd so it makes the wifi adaper into an access point
-  echo ":::"
-  echo "::: Installing hostapd"
-  $SUDO apt install -y hostapd
   echo "::: DONE!"
 }
 
@@ -181,7 +206,35 @@ function edit_hostapd() {
 DAEMON_CONF="/etc/hostapd/hostapd.conf"' | sudo tee --append /etc/default/hostapd > /dev/null
     
   $SUDO cp /etc/network/interfaces /etc/network/interfaces.bkp
-    $SUDO echo 'source-directory /etc/network/interfaces.d
+  
+if [ $varw = 2 ]; then
+  $SUDO echo 'source-directory /etc/network/interfaces.d
+auto lo
+iface lo inet loopback
+
+iface eth0 inet dhcp
+
+allow-hotplug wlan0
+iface wlan0 inet static
+address 10.0.0.1
+netmask 255.255.255.0
+
+allow-hotplug wlan1
+iface wlan1 inet dhcp
+wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+' > /etc/network/interfaces
+
+	$SUDO echo 'network={
+ssid=$var4
+psk=$var5
+proto=RSN
+key_mgmt=WPA-PSK
+pairwise=CCMP
+auth_alg=OPEN
+}
+' > /etc/wpa_supplicant/wpa_supplicant.conf
+else
+	$SUDO echo 'source-directory /etc/network/interfaces.d
 auto lo
 iface lo inet loopback
 
@@ -191,7 +244,9 @@ allow-hotplug wlan0
 iface wlan0 inet static
 address 10.0.0.1
 netmask 255.255.255.0' > /etc/network/interfaces
-  $SUDO echo 'interface=wlan0
+fi
+ 
+ $SUDO echo 'interface=wlan0
 driver=nl80211
 ctrl_interface=/var/run/Hostapd
 ctrl_interface_group=0
@@ -209,14 +264,6 @@ rsn_pairwise=CCMP' > /etc/hostapd/hostapd.conf
   echo "ssid=$var2" | sudo tee --append /etc/hostapd/hostapd.conf > /dev/null
   echo "wpa_passphrase=$var3" | sudo tee --append /etc/hostapd/hostapd.conf > /dev/null
   $SUDO ln -s /etc/hostapd/hostapd.conf /home/pi/hostapd.conf
-  echo "::: DONE!"
-}
-
-function install_dnsmasq() {  
-  # installing dnsmasq so it can serve up your wifiz
-  echo ":::"
-  echo "::: Installing dnsmasq"
-  $SUDO apt install -y dnsmasq
   echo "::: DONE!"
 }
 
@@ -239,16 +286,6 @@ function install_exfat() {
 	$SUDO cp usbmount_Pi.conf /etc/usbmount/usbmount.conf
 	$SUDO ln -s /media/usb0 /home/pi/Videos
 	echo "::: DONE!"
-}
-
-function install_droppy() {
-  # update Node.js, NPM and install droppy to allow for web file serving
-  echo ":::"
-  echo "::: Installing NODE, NPM, N and Droppy"
-  $SUDO apt-get install -y node npm
-  $SUDO npm cache clean -f && sudo npm install -g n
-  $SUDO n stable
-  $SUDO npm install -g droppy
 }
 
 function fix_startup() {
@@ -274,17 +311,12 @@ function restart_Pi() {
 update_yo_shit
 delete_crap
 upgrade_yo_shit
-install_samba
+install_the_things
 edit_samba
-install_minidlna
 edit_minidlna
-install_hostapd
 edit_hostapd
-install_dnsmasq
 edit_dnsmasq
 #install_exfat
-install_droppy
 fix_startup
 install_wifi
 restart_Pi
-  
