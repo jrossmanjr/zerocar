@@ -68,7 +68,7 @@ else
 fi
 
 
-if [ $varw = Two ]; then
+if [ $var9 = Two ]; then
 	var2=$(whiptail --inputbox "Name the WiFi Hotspot" ${r} ${c} ZeroCar --title "Wifi Name" 3>&1 1>&2 2>&3)
 	var3=$(whiptail --passwordbox "Please enter a password for the WiFi hotspot" ${r} ${c} --title "WiFi Password" 3>&1 1>&2 2>&3)
 	var4=$(whiptail --inputbox "What WiFi to connect to" ${r} ${c} HomeRouter --title "Router Name" 3>&1 1>&2 2>&3)
