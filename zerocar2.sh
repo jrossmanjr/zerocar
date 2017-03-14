@@ -56,12 +56,19 @@ whiptail --msgbox --title "ZeroCar automated installer" "\n\nFirst things first.
 
 var1=$(whiptail --inputbox "Name the DLNA Server" ${r} ${c} ZeroCar --title "DLNA Name" 3>&1 1>&2 2>&3)
 
-varw=$(whiptail --title "What you rocking under the hood?" --radiolist \ 
-"How many WiFi adapters are you running?" ${r} ${c} 2 \
-"One" 1 ON \
-"Two" 2 OFF 3>&1 1>&2 2>&3)
+var9=$(whiptail --title "What you rocking under the hood?" --radiolist "How many WiFi adapters are you running?" ${r} ${c} 2 \
+"One" "One Adapter" ON \
+"Two" "Two Adapters" OFF 3>&1 1>&2 2>&3)
 
-if [ $varw = 2 ]; then
+exitstatus=$?
+if [ $exitstatus = 0 ]; then
+    echo "The chosen distro is:" $var9
+else
+    echo "You chose Cancel."
+fi
+
+
+if [ $varw = Two ]; then
 	var2=$(whiptail --inputbox "Name the WiFi Hotspot" ${r} ${c} ZeroCar --title "Wifi Name" 3>&1 1>&2 2>&3)
 	var3=$(whiptail --passwordbox "Please enter a password for the WiFi hotspot" ${r} ${c} --title "WiFi Password" 3>&1 1>&2 2>&3)
 	var4=$(whiptail --inputbox "What WiFi to connect to" ${r} ${c} HomeRouter --title "Router Name" 3>&1 1>&2 2>&3)
