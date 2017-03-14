@@ -122,30 +122,31 @@ function install_the_things() {
   # installing samba server so you can connect and add files easily
   echo ":::"
   echo "::: Installing Samba"
-  $SUDO apt install -y samba samba-common-bin
+  $SUDO apt-get install -y samba samba-common-bin > /dev/null
   echo "::: DONE!"
   # installing minidlna to serve up your shit nicely
   echo ":::"
   echo "::: Installing minidlna"
-  $SUDO apt install -y minidlna
+  $SUDO apt-get install -y minidlna > /dev/null
   echo "::: DONE!"
   # installing hostapd so it makes the wifi adaper into an access point
   echo ":::"
   echo "::: Installing hostapd"
-  $SUDO apt install -y hostapd
+  $SUDO apt-get install -y hostapd > /dev/null
   echo "::: DONE!"
   # installing dnsmasq so it can serve up your wifiz
   echo ":::"
   echo "::: Installing dnsmasq"
-  $SUDO apt install -y dnsmasq
+  $SUDO apt-get install -y dnsmasq > /dev/null
   echo "::: DONE!"
   # update Node.js, NPM and install Droppy to allow for web file serving
   echo ":::"
   echo "::: Installing NODE, NPM, N and Droppy"
-  $SUDO apt-get install -y node npm
+  $SUDO apt install -y node npm
   $SUDO npm cache clean -f && sudo npm install -g n
   $SUDO n stable
   $SUDO npm install -g droppy
+  echo ":::"
   echo "::: DONE installing all the things!"
 }
 
@@ -207,7 +208,7 @@ DAEMON_CONF="/etc/hostapd/hostapd.conf"' | sudo tee --append /etc/default/hostap
     
   $SUDO cp /etc/network/interfaces /etc/network/interfaces.bkp
   
-if [ $varw = 2 ]; then
+if [ $var9 = Two ]; then
   $SUDO echo 'source-directory /etc/network/interfaces.d
 auto lo
 iface lo inet loopback
@@ -302,7 +303,7 @@ function restart_Pi() {
   echo ":::"
   echo "::: It is finished..."
   $SUDO service hostapd start && sudo /etc/init.d/dnsmasq restart
-  echo "::: please restart the Pi. -- suggest sudo shutdown -r now"
+  echo "::: please restart the Pi. -- suggest sudo reboot"
   
 }
 
