@@ -20,10 +20,10 @@ Used to deploy a RaspberryPi Zero DLNA server for in the car
     
     - Run -- 
         ```
-        git clone https://github.com/jrossmanjr/ZeroCar.git
+        git clone https://github.com/jrossmanjr/zerocar.git
         cd ZeroCar/
-        chmod +x ZeroCar.sh
-        sudo ./ZeroCar.sh
+        chmod +x zerocar.sh
+        sudo ./zerocar.sh
         ```
         - Fill in data for the prompts!
     
@@ -39,10 +39,10 @@ Used to deploy a RaspberryPi Zero DLNA server for in the car
 
     - Run -- 
         ```
-        git clone https://github.com/jrossmanjr/ZeroCar.git
+        git clone https://github.com/jrossmanjr/zerocar.git
         cd ZeroCar/
-        chmod +x ChipCar.sh
-        sudo ./ChipCar.sh
+        chmod +x chipcar.sh
+        sudo ./chipcar.sh
         ```
         
 - The installer for Pi or C.H.I.P. will prompt you for:
