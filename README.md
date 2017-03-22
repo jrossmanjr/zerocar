@@ -21,7 +21,7 @@ Used to deploy a RaspberryPi Zero DLNA server for in the car
     - Run -- 
         ```
         git clone https://github.com/jrossmanjr/zerocar.git
-        cd ZeroCar/
+        cd zerocar/
         chmod +x zerocar.sh
         sudo ./zerocar.sh
         ```
@@ -40,7 +40,7 @@ Used to deploy a RaspberryPi Zero DLNA server for in the car
     - Run -- 
         ```
         git clone https://github.com/jrossmanjr/zerocar.git
-        cd ZeroCar/
+        cd zerocar/
         chmod +x chipcar.sh
         sudo ./chipcar.sh
         ```
