@@ -12,7 +12,7 @@
 # By default this script does nothing.
 
 #restart the wifi adapter
-ifdown wlan0; ifup wlan0
+ifdown wlan0; ifdown wlan1; ifup wlan0; ifup wlan1
 
 # Print the IP address
 _IP=$(hostname -I) || true
@@ -22,6 +22,6 @@ fi
 
 sudo service hostapd restart
 
-sudo droppy start -d -c /srv/droppy/config -f /home/pi/ &
+sudo droppy start -d -c /srv/droppy/config -f /home/pi &
 
 exit 0
