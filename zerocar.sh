@@ -112,7 +112,7 @@ function install_wifi() {
   echo ":::"
   echo "::: Installing wifi drivers"
   $SUDO chmod -R 777 /home/pi/
-  wget https://dl.dropboxusercontent.com/u/80256631/install-wifi.tar.gz
+  wget http://www.fars-robotics.net/install-wifi.tar.gz
   tar xzf install-wifi.tar.gz
   $SUDO ./install-wifi
   echo "::: DONE!"
