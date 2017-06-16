@@ -237,14 +237,11 @@ function stop_ipv6() {
 	echo "::: DONE!"
 }
 
-function install_droppy() {
-  # update Node.js, NPM and install droppy to allow for web file serving
+function install_docker() {
+  # install docker
   echo ":::"
-  echo "::: Installing NODE, NPM, N and Droppy"
-  $SUDO apt-get install -y node npm
-  $SUDO npm cache clean -f && sudo npm install -g n
-  $SUDO n stable
-  $SUDO npm install -g droppy
+  echo "::: Installing DOCKER"
+  $SUDO curl -sSL https://test.docker.com | sh
 }
 
 function fix_startup() {
@@ -282,6 +279,6 @@ install_dnsmasq
 edit_dnsmasq
 install_usbmount
 stop_ipv6
-install_droppy
+install_docker
 fix_startup
 restart_CHIP
