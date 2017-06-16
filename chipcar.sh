@@ -8,7 +8,6 @@
 # (at your option) any later version.
 # shoutout to the folks making PiHole, Adafruit, & PIRATEBOX for showing me the way and essentially teaching me to code for the Pi...
 # alot of help came from the CHIP BBS and this post -- https://slack-files.com/T02GVC9G6-F0H7G3WCT-25e7dfb781
-# huge thanks to silverwind who made Droppy...makes managing the files much easier thru the web : https://github.com/silverwind/droppy
 
 # Run this script as root or under sudo
 echo ":::
