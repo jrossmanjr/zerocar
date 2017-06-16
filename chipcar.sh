@@ -71,8 +71,10 @@ function update_yo_shit() {
 function upgrade_yo_shit() {
 	#updating the distro...
 	echo ":::"
-	echo "::: Running upgrades"
+	echo "::: Running upgrades & insatlling locales"
 	$SUDO apt -y upgrade
+	$SUDO apt install locales
+	$SUDO locale-gen en_US en_US.UTF-8
 	echo "::: DONE!"
 }
 
