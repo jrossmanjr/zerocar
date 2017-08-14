@@ -93,7 +93,7 @@ function delete_crap() {
   # delete all the junk that has nothing to do with being a lightweight server
   echo ":::"
   echo "::: Removing JUNK...from the trunk"
-  $SUDO apt -y purge minecraft-pi python-minecraftpi wolfram-engine sonic-pi libreoffice scratch
+  $SUDO apt-get -y purge minecraft-pi python-minecraftpi wolfram-engine sonic-pi libreoffice scratch
   $SUDO apt-get autoremove
   $SUDO apt-get purge
   echo "::: DONE!"
@@ -103,7 +103,7 @@ function upgrade_yo_shit() {
   #updating the distro...
   echo ":::"
   echo "::: Running upgrades"
-  $SUDO apt -y upgrade
+  $SUDO apt upgrade -y
   echo "::: DONE!"
 }
 
@@ -142,7 +142,7 @@ function install_the_things() {
   # update Node.js, NPM and install Droppy to allow for web file serving
   echo ":::"
   echo "::: Installing NODE, NPM, N and Droppy"
-  $SUDO apt install -y node npm
+  $SUDO apt-get -y install node npm
   $SUDO npm cache clean -f && sudo npm install -g n
   $SUDO n stable
   $SUDO npm install -g droppy
