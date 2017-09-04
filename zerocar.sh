@@ -159,17 +159,16 @@ function edit_samba() {
   $SUDO cp /etc/samba/smb.conf /etc/samba/smb.conf.bkp
   $SUDO mkdir /home/pi/Videos
 
-  echo '
-  [Mediadrive]
-   comment = Public Storage
-   path = /home/pi/
-   valid users = @users
-   force group = users
-   create mask = 0775
-   directory mask = 0775
-   read only = no
-   browsable = yes
-   guest ok = yes' | sudo tee --append /etc/samba/smb.conf > /dev/null
+  echo '[Mediadrive]
+        comment = Public Storage
+        path = /home/pi/
+        create mask = 0775
+        directory mask = 0775
+        read only = no
+        browsable = yes
+        writable = yes
+        guest ok = yes
+        guest only = yes' | sudo tee --append /etc/samba/smb.conf > /dev/null
   $SUDO /etc/init.d/samba restart
   echo "::: DONE!"
 }
