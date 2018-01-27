@@ -253,6 +253,22 @@ function fix_startup() {
   echo "::: DONE!"
 }
 
+function install_node() {
+  # update Node.js, NPM and install Droppy to allow for web file serving
+  echo ":::"
+  echo "::: Installing NODE, NPM, N and Droppy"
+  $SUDO apt-get remove -y nodejs nodejs-legacy nodered
+  curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+  $SUDO apt-get install -y nodejs
+  $SUDO npm install npm@latest -g
+  $SUDO npm install -g n
+  $SUDO n stable
+  $SUDO npm install -g droppy
+  echo ":::"
+  echo "::: DONE!" 
+}
+
+
 function restart_CHIP() {
 	# restarting
 	echo ":::"
@@ -276,8 +292,9 @@ install_hostapd
 edit_hostapd
 install_dnsmasq
 edit_dnsmasq
-install_usbmount
+#install_usbmount
 stop_ipv6
-install_docker
+install_node
+#install_docker
 fix_startup
 restart_CHIP
