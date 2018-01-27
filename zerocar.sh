@@ -138,15 +138,6 @@ function install_the_things() {
   echo ":::"
   echo "::: Installing dnsmasq"
   $SUDO apt-get install -y dnsmasq > /dev/null
-  echo "::: DONE!"
-  # update Node.js, NPM and install Droppy to allow for web file serving
-  echo ":::"
-  echo "::: Installing NODE, NPM, N and Droppy"
-  $SUDO apt-get -y install node npm
-  $SUDO npm cache clean -f && sudo npm install -g n
-  $SUDO n stable
-  $SUDO npm install -g droppy
-  echo ":::"
   echo "::: DONE installing all the things!"
 }
 
@@ -306,12 +297,27 @@ function restart_Pi() {
   
 }
 
+function install_node() {
+  # update Node.js, NPM and install Droppy to allow for web file serving
+  echo ":::"
+  echo "::: Installing NODE, NPM, N and Droppy"
+  $SUDO apt-get remove -y nodejs nodejs-legacy nodered
+  curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+  $SUDO apt-get install -y nodejs
+  $SUDO npm install npm@latest -g
+  $SUDO npm install -g n
+  $SUDO n stable
+  $SUDO npm install -g droppy
+  echo ":::"
+  echo "::: DONE!" 
+}
 
 
 update_yo_shit
 delete_crap
 upgrade_yo_shit
 install_the_things
+install_node
 edit_samba
 edit_minidlna
 edit_hostapd
