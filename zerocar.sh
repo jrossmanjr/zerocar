@@ -312,6 +312,12 @@ function install_node() {
   echo "::: DONE!" 
 }
 
+function install_raspap() {
+  # install raspap to controll wifi settings via web interface
+  echo ":::"
+  echo "::: Installing Raspap"
+  wget -q https://git.io/voEUQ -O /tmp/raspap && bash /tmp/raspap
+}
 
 update_yo_shit
 delete_crap
@@ -325,4 +331,5 @@ edit_dnsmasq
 #install_exfat
 fix_startup
 install_wifi
+#install_raspap
 restart_Pi
