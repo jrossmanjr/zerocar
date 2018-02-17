@@ -302,8 +302,7 @@ function install_node() {
   # update Node.js, NPM and install Droppy to allow for web file serving
   echo ":::"
   echo "::: Installing NODE, NPM, N and Droppy"
-  wget -O - https://raw.githubusercontent.com/sdesalas/node-pi-zero/master/install-node-v8.9.0.sh | bash
-  $SUDO npm install npm@latest -g
+  wget -O - https://raw.githubusercontent.com/sdesalas/node-pi-zero/master/install-node-v.lts.sh | bash
   $SUDO npm install -g n
   $SUDO n stable
   $SUDO npm install -g droppy
