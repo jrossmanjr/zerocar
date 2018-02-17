@@ -9,6 +9,7 @@
 # shoutout to the folks making PiHole, Adafruit, & PIRATEBOX for showing me the way and essentially teaching me to code for the Pi...
 # thanks to MrEngman for making the wifi installer!! more info: https://www.raspberrypi.org/forums/viewtopic.php?p=462982
 # alot of help came from ADAFRUIT: https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/install-software
+# tahnkyou to SDESALAS who made a schweet node script -- https://github.com/sdesalas/node-pi-zero
 # huge thanks to silverwind who made Droppy...makes managing the files much easier thru the web : https://github.com/silverwind/droppy
 
 
@@ -301,9 +302,7 @@ function install_node() {
   # update Node.js, NPM and install Droppy to allow for web file serving
   echo ":::"
   echo "::: Installing NODE, NPM, N and Droppy"
-  $SUDO apt-get remove -y nodejs nodejs-legacy nodered
-  curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
-  $SUDO apt-get install -y nodejs
+  wget -O - https://raw.githubusercontent.com/sdesalas/node-pi-zero/master/install-node-v8.9.0.sh | bash
   $SUDO npm install npm@latest -g
   $SUDO npm install -g n
   $SUDO n stable
