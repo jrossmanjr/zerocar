@@ -269,17 +269,6 @@ dhcp-range=10.0.0.2,10.0.0.9,255.255.255.0,12h' | sudo tee --append /etc/dnsmasq
   echo "::: DONE!"
 }
 
-function install_exfat() {	
-	# installing exfat (to allow for larger file support), automount, and simlinking a usb drive to 'Videos' folder
-	echo ":::"
-	echo "::: Installing exfat, ntfs, usbmount, and simlinking Videos"
-	$SUDO apt-get install -y usbmount
-	$SUDO apt-get install -y ntfs-3g exfat-fuse exfat-utils cryptsetup hfsprogs
-	$SUDO cp usbmount_Pi.conf /etc/usbmount/usbmount.conf
-	$SUDO ln -s /media/usb0 /home/pi/Videos
-	echo "::: DONE!"
-}
-
 function fix_startup() {
   # restart the wifi as last function on startup
   echo ":::"
@@ -302,20 +291,13 @@ function install_node() {
   # update Node.js, NPM and install Droppy to allow for web file serving
   echo ":::"
   echo "::: Installing NODE, NPM, N and Droppy"
-  wget -O - https://raw.githubusercontent.com/sdesalas/node-pi-zero/master/install-node-v.lts.sh | bash
+  wget -O - https://raw.githubusercontent.com/sdesalas/node-pi-zero/master/install-node-v.last.sh | bash
   $SUDO npm install -g n
-  $SUDO n stable
   $SUDO npm install -g droppy
   echo ":::"
   echo "::: DONE!" 
 }
 
-function install_raspap() {
-  # install raspap to controll wifi settings via web interface
-  echo ":::"
-  echo "::: Installing Raspap"
-  wget -q https://git.io/voEUQ -O /tmp/raspap && bash /tmp/raspap
-}
 
 update_yo_shit
 delete_crap
@@ -326,8 +308,6 @@ edit_samba
 edit_minidlna
 edit_hostapd
 edit_dnsmasq
-#install_exfat
 fix_startup
 install_wifi
-#install_raspap
 restart_Pi
