@@ -219,14 +219,6 @@ dhcp-range=10.0.0.2,10.0.0.250,12h' | sudo tee --append /etc/dnsmasq.d/access_po
 	echo "::: DONE!"
 }
 
-function install_usbmount() {	
-	# installing usb automount, and simlinking a usb drive to 'Videos' folder
-	echo ":::"
-	echo "::: Installing usb drive format support"
-	$SUDO apt-get -y install cryptsetup hfsprogs ntfs-3g exfat exfat-utils
-	echo "::: DONE!"
-}
-
 function stop_ipv6() {	
 	# stopping ipv6 
 	echo ":::"
@@ -234,13 +226,6 @@ function stop_ipv6() {
 	$SUDO sysctl -w net.ipv6.conf.all.disable_ipv6=1
 	$SUDO sysctl -w net.ipv6.conf.default.disable_ipv6=1
 	echo "::: DONE!"
-}
-
-function install_docker() {
-  # install docker
-  echo ":::"
-  echo "::: Installing DOCKER"
-  $SUDO curl -sSL https://test.docker.com | sh
 }
 
 function fix_startup() {
@@ -257,13 +242,9 @@ function install_node() {
   # update Node.js, NPM and install Droppy to allow for web file serving
   echo ":::"
   echo "::: Installing NODE, NPM, N and Droppy"
-  $SUDO apt-get remove -y nodejs nodejs-legacy nodered
-  curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
-  $SUDO apt-get install -y nodejs
+  wget -O - https://raw.githubusercontent.com/sdesalas/node-pi-zero/master/install-node-v.last.sh | bash
   $SUDO npm install npm@latest -g
-  $SUDO npm install -g n
-  $SUDO n stable
-  $SUDO npm install -g droppy
+  $SUDO npm install -g --production droppy
   echo ":::"
   echo "::: DONE!" 
 }
@@ -292,9 +273,7 @@ install_hostapd
 edit_hostapd
 install_dnsmasq
 edit_dnsmasq
-#install_usbmount
 stop_ipv6
 install_node
-#install_docker
 fix_startup
 restart_CHIP
