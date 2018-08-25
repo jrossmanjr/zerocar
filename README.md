@@ -30,7 +30,10 @@ Used to deploy a RaspberryPi Zero DLNA server for in the car
     
 - C.H.I.P. Setup:
     - Use a powered USB hub and Flash the C.H.I.P. 
-        - TO FLASH -- `http://flash.getchip.com/`
+        - TO FLASH -- http://flash.getchip.com/
+        - OR -
+            - See here for a Raspberry Pi based flasher - https://bbs.nextthing.co/t/chip-flasher-pi/21096
+            - See here for Posts on Chip preservation efforts - https://www.reddit.com/r/ChipCommunity/comments/8ey1iv/ongoing_chip_preservation_efforts/
         - On that hub have: 
             - Keyboard
             - VGA/HDMI Monitor
