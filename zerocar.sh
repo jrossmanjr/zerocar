@@ -238,21 +238,43 @@ address 10.0.0.1
 netmask 255.255.255.0' > /etc/network/interfaces
 fi
  
- $SUDO echo 'interface=wlan0
+ $SUDO echo '
+interface=wlan0
+
+# this is the driver that must be used for ath9k and other similar chipset devices
 driver=nl80211
-ctrl_interface=/var/run/Hostapd
-ctrl_interface_group=0
+
+# yes, it says 802.11g, but the n-speeds get layered on top of it
 hw_mode=g
-channel=1
-#ieee80211d=1
-#country_code=US
+
+# this enables the 802.11n speeds and capabilities ...  You will also need to enable WMM for full HT functionality.
 ieee80211n=1
 wmm_enabled=1
-beacon_int=100
+
+# self-explanatory, but not all channels may be enabled for you - check /var/log/messages for details
+channel=0
+
+# adjust to fit your location
+country_code=US
+
+# let your AP broadcast the settings that agree with the above-mentioned regulatory requirements per country
+ieee80211d=1
+
+# settings for security
 auth_algs=1
 wpa=2
 wpa_key_mgmt=WPA-PSK
-rsn_pairwise=CCMP' > /etc/hostapd/hostapd.conf
+rsn_pairwise=CCMP
+macaddr_acl=0
+
+# these have to be set in agreement w/ channel and some other values... read hostapd.conf docs
+ht_capab=[HT40][SHORT-GI-20][DSSS_CCK-40]
+
+# makes the SSID visible and broadcasted
+ignore_broadcast_ssid=0
+
+###############
+' > /etc/hostapd/hostapd.conf
   echo "ssid=$var2" | sudo tee --append /etc/hostapd/hostapd.conf > /dev/null
   echo "wpa_passphrase=$var3" | sudo tee --append /etc/hostapd/hostapd.conf > /dev/null
   $SUDO ln -s /etc/hostapd/hostapd.conf /home/pi/hostapd.conf
