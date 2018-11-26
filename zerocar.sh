@@ -244,6 +244,10 @@ interface=wlan0
 # this is the driver that must be used for ath9k and other similar chipset devices
 driver=nl80211
 
+#add the controll interface for hostapd
+ctrl_interface=/var/run/Hostapd
+ctrl_interface_group=0
+
 # yes, it says 802.11g, but the n-speeds get layered on top of it
 hw_mode=g
 
