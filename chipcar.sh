@@ -11,18 +11,18 @@
 
 # Run this script as root or under sudo
 echo ":::
- ██████╗██╗  ██╗██╗██████╗  ██████╗ █████╗ ██████╗ 
+ ██████╗██╗  ██╗██╗██████╗  ██████╗ █████╗ ██████╗
 ██╔════╝██║  ██║██║██╔══██╗██╔════╝██╔══██╗██╔══██╗
 ██║     ███████║██║██████╔╝██║     ███████║██████╔╝
 ██║     ██╔══██║██║██╔═══╝ ██║     ██╔══██║██╔══██╗
 ╚██████╗██║  ██║██║██║     ╚██████╗██║  ██║██║  ██║
  ╚═════╝╚═╝  ╚═╝╚═╝╚═╝      ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝
-                                                   
 
-    
+
+
     By - jrossmanjr   //   https://github.com/jrossmnajr/ZeroCar             "
 # Find the rows and columns will default to 80x24 is it can not be detected
-screen_size=$(stty size 2>/dev/null || echo 24 80) 
+screen_size=$(stty size 2>/dev/null || echo 24 80)
 rows=$(echo $screen_size | awk '{print $1}')
 columns=$(echo $screen_size | awk '{print $2}')
 
@@ -77,7 +77,7 @@ function upgrade_yo_shit() {
 	echo "::: DONE!"
 }
 
-function install_samba() {	
+function install_samba() {
 	# installing samba server so you can connect and add files easily
 	echo ":::"
 	echo "::: Installing Samba"
@@ -85,7 +85,7 @@ function install_samba() {
 	echo "::: DONE!"
 }
 
-function edit_samba() {	
+function edit_samba() {
 	# editing Samba
 	echo ":::"
 	echo "::: Editing Samba... "
@@ -108,7 +108,7 @@ function edit_samba() {
 	echo "::: DONE!"
 }
 
-function install_minidlna() {	
+function install_minidlna() {
 	# installing minidlna to serve up your shit nicely
 	echo ":::"
 	echo -n "::: Installing minidlna"
@@ -116,12 +116,12 @@ function install_minidlna() {
 	echo "::: DONE!"
 }
 
-function edit_minidlna() {	
+function edit_minidlna() {
 	# editing minidlna
 	echo ":::"
 	echo -n "::: Editing minidlna"
 	$SUDO cp /etc/minidlna.conf /etc/minidlna.conf.bkp
-	$SUDO echo 'user=minidlna 
+	$SUDO echo 'user=minidlna
 		media_dir=/home/chip/Videos/
 		db_dir=/home/chip/minidlna
 		log_dir=/var/log
@@ -142,7 +142,7 @@ function edit_minidlna() {
 	echo "::: DONE!"
 }
 
-function install_hostapd() {	
+function install_hostapd() {
 	# installing hostapd so it makes the wifi adaper into an access point
 	echo ":::"
 	echo "::: Installing hostapd"
@@ -150,14 +150,14 @@ function install_hostapd() {
 	echo "::: DONE!"
 }
 
-function edit_hostapd() {	
+function edit_hostapd() {
 	# editing hostapd and associated properties
 	echo ":::"
 	echo "::: Editing hostapd"
 	$SUDO cp /etc/default/hostapd /etc/default/hostapd.bkp
 	echo '
 DAEMON_CONF="/etc/hostapd/hostapd.conf"' | sudo tee --append /etc/default/hostapd > /dev/null
-  	
+
 	$SUDO cp /etc/network/interfaces /etc/network/interfaces.bkp
   	$SUDO echo '
 auto lo
@@ -167,21 +167,48 @@ auto wlan1
 iface wlan1 inet static
   address 10.0.0.1
   netmask 255.255.255.0' > /etc/network/interfaces
-	$SUDO echo 'interface=wlan1
-driver=nl80211
-ctrl_interface=/var/run/Hostapd
-ctrl_interface_group=0
-hw_mode=g
-channel=1
-#ieee80211d=1
-#country_code=US
-ieee80211n=1
-wmm_enabled=1
-beacon_int=100
-auth_algs=1
-wpa=2
-wpa_key_mgmt=WPA-PSK
-rsn_pairwise=CCMP' > /etc/hostapd.conf
+
+  $SUDO echo '
+  interface=wlan1
+
+  # this is the driver that must be used for ath9k and other similar chipset devices
+  driver=nl80211
+
+  #add the controll interface for hostapd
+  ctrl_interface=/var/run/Hostapd
+  ctrl_interface_group=0
+
+  # yes, it says 802.11g, but the n-speeds get layered on top of it
+  hw_mode=g
+
+  # this enables the 802.11n speeds and capabilities ...  You will also need to enable WMM for full HT functionality.
+  ieee80211n=1
+  wmm_enabled=1
+
+  # self-explanatory, but not all channels may be enabled for you - check /var/log/messages for details
+  channel=6
+
+  # adjust to fit your location
+  country_code=US
+
+  # let your AP broadcast the settings that agree with the above-mentioned regulatory requirements per country
+  ieee80211d=1
+
+  # settings for security
+  auth_algs=1
+  wpa=2
+  wpa_key_mgmt=WPA-PSK
+  rsn_pairwise=CCMP
+  macaddr_acl=0
+
+  # these have to be set in agreement w/ channel and some other values... read hostapd.conf docs
+  ht_capab=[HT20][SHORT-GI-20][DSSS_CCK-40]
+
+  # makes the SSID visible and broadcasted
+  ignore_broadcast_ssid=0
+
+  ###############
+  ' > /etc/hostapd.conf
 	echo "ssid=$var2" | sudo tee --append /etc/hostapd.conf > /dev/null
 	echo "wpa_passphrase=$var3" | sudo tee --append /etc/hostapd.conf > /dev/null
 	$SUDO echo '[Unit]
@@ -200,7 +227,7 @@ WantedBy=multi-user.target' > /lib/systemd/system/hostapd-systemd.service
 	echo "::: DONE!"
 }
 
-function install_dnsmasq() {	
+function install_dnsmasq() {
 	# installing dnsmasq so it can serve up your wifiz
 	echo ":::"
 	echo "::: Installing dnsmasq"
@@ -208,21 +235,21 @@ function install_dnsmasq() {
 	echo "::: DONE!"
 }
 
-function edit_dnsmasq() {	
+function edit_dnsmasq() {
 	# editing dnsmasq so it can serve up your wifiz
 	echo ":::"
 	echo "::: Editing dnsmasq"
-	$SUDO echo '	
+	$SUDO echo '
 interface=wlan1
 except-interface=wlan0
 dhcp-range=10.0.0.2,10.0.0.250,12h' | sudo tee --append /etc/dnsmasq.d/access_point.conf > /dev/null
 	echo "::: DONE!"
 }
 
-function stop_ipv6() {	
-	# stopping ipv6 
+function stop_ipv6() {
+	# stopping ipv6
 	echo ":::"
-	echo "::: Installing stoping ipv6"
+	echo "::: Stoping ipv6"
 	$SUDO sysctl -w net.ipv6.conf.all.disable_ipv6=1
 	$SUDO sysctl -w net.ipv6.conf.default.disable_ipv6=1
 	echo "::: DONE!"
@@ -246,7 +273,7 @@ function install_node() {
   $SUDO npm install npm@latest -g
   $SUDO npm install -g --production droppy
   echo ":::"
-  echo "::: DONE!" 
+  echo "::: DONE!"
 }
 
 
@@ -254,8 +281,8 @@ function restart_CHIP() {
 	# restarting
 	echo ":::"
 	echo "::: It is finished... restarting."
-	$SUDO sudo update-rc.d hostapd disable 
-	$SUDO systemctl daemon-reload  
+	$SUDO sudo update-rc.d hostapd disable
+	$SUDO systemctl daemon-reload
 	$SUDO systemctl enable hostapd-systemd
 	$SUDO /etc/init.d/dnsmasq restart
 	$SUDO shutdown -r now

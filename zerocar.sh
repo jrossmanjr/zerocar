@@ -15,18 +15,18 @@
 
 # Run this script as root or under sudo
 echo ":::
-███████╗███████╗██████╗  ██████╗  ██████╗ █████╗ ██████╗ 
+███████╗███████╗██████╗  ██████╗  ██████╗ █████╗ ██████╗
 ╚══███╔╝██╔════╝██╔══██╗██╔═══██╗██╔════╝██╔══██╗██╔══██╗
   ███╔╝ █████╗  ██████╔╝██║   ██║██║     ███████║██████╔╝
  ███╔╝  ██╔══╝  ██╔══██╗██║   ██║██║     ██╔══██║██╔══██╗
 ███████╗███████╗██║  ██║╚██████╔╝╚██████╗██║  ██║██║  ██║
 ╚══════╝╚══════╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝
-                                                         
-    
+
+
     By - jrossmanjr   //   https://github.com/jrossmnajr/ZeroCar             "
 
 # Find the rows and columns will default to 80x24 is it can not be detected
-screen_size=$(stty size 2>/dev/null || echo 24 80) 
+screen_size=$(stty size 2>/dev/null || echo 24 80)
 rows=$(echo $screen_size | awk '{print $1}')
 columns=$(echo $screen_size | awk '{print $2}')
 
@@ -80,7 +80,7 @@ else
 fi
 
 whiptail --msgbox --title "ZeroCar automated installer" "\n\nOk all the data has been entered...The install will now complete!" ${r} ${c}
- 
+
 
 function update_yo_shit() {
   #updating the distro...
@@ -108,7 +108,7 @@ function upgrade_yo_shit() {
   echo "::: DONE!"
 }
 
-function install_wifi() { 
+function install_wifi() {
   # installing wifi drivers
   echo ":::"
   echo "::: Installing wifi drivers"
@@ -142,7 +142,7 @@ function install_the_things() {
   echo "::: DONE installing all the things!"
 }
 
-function edit_samba() { 
+function edit_samba() {
   # editing Samba
   echo ":::"
   echo "::: Editing Samba... "
@@ -165,12 +165,12 @@ function edit_samba() {
   echo "::: DONE!"
 }
 
-function edit_minidlna() {  
+function edit_minidlna() {
   # editing minidlna
   echo ":::"
   echo -n "::: Editing minidlna"
   $SUDO cp /etc/minidlna.conf /etc/minidlna.conf.bkp
-  $SUDO echo 'user=minidlna 
+  $SUDO echo 'user=minidlna
     media_dir=/home/pi/Videos/
     db_dir=/home/pi/minidlna
     log_dir=/var/log
@@ -189,16 +189,16 @@ function edit_minidlna() {
   echo "::: DONE!"
 }
 
-function edit_hostapd() { 
+function edit_hostapd() {
   # editing hostapd and associated properties
   echo ":::"
   echo "::: Editing hostapd"
   $SUDO cp /etc/default/hostapd /etc/default/hostapd.bkp
   echo '
 DAEMON_CONF="/etc/hostapd/hostapd.conf"' | sudo tee --append /etc/default/hostapd > /dev/null
-    
+
   $SUDO cp /etc/network/interfaces /etc/network/interfaces.bkp
-  
+
 if [ $var9 = Two ]; then
   $SUDO echo 'source-directory /etc/network/interfaces.d
 auto lo
@@ -237,7 +237,7 @@ iface wlan0 inet static
 address 10.0.0.1
 netmask 255.255.255.0' > /etc/network/interfaces
 fi
- 
+
  $SUDO echo '
 interface=wlan0
 
@@ -285,11 +285,11 @@ ignore_broadcast_ssid=0
   echo "::: DONE!"
 }
 
-function edit_dnsmasq() { 
+function edit_dnsmasq() {
   # editing dnsmasq so it can serve up your wifiz
   echo ":::"
   echo "::: Editing dnsmasq"
-  $SUDO echo '  
+  $SUDO echo '
 interface=wlan0
 dhcp-range=10.0.0.2,10.0.0.9,255.255.255.0,12h' | sudo tee --append /etc/dnsmasq.conf > /dev/null
   echo "::: DONE!"
@@ -310,7 +310,7 @@ function restart_Pi() {
   echo "::: It is finished..."
   $SUDO service hostapd start && sudo /etc/init.d/dnsmasq restart
   echo "::: please restart the Pi. -- suggest sudo reboot"
-  
+
 }
 
 function install_node() {
@@ -321,7 +321,7 @@ function install_node() {
   $SUDO npm install -g n
   $SUDO npm install -g droppy
   echo ":::"
-  echo "::: DONE!" 
+  echo "::: DONE!"
 }
 
 
