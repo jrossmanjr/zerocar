@@ -256,7 +256,7 @@ ieee80211n=1
 wmm_enabled=1
 
 # self-explanatory, but not all channels may be enabled for you - check /var/log/messages for details
-channel=0
+channel=6
 
 # adjust to fit your location
 country_code=US
@@ -273,6 +273,9 @@ macaddr_acl=0
 
 # these have to be set in agreement w/ channel and some other values... read hostapd.conf docs
 ht_capab=[HT20][SHORT-GI-20][DSSS_CCK-40]
+
+# makes the SSID visible and broadcasted
+ignore_broadcast_ssid=0
 
 ###############
 ' > /etc/hostapd/hostapd.conf
