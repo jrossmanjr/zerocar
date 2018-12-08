@@ -112,7 +112,7 @@ function install_wifi() {
   # installing wifi drivers
   echo ":::"
   echo "::: Installing wifi drivers"
-  $SUDO chmod -R 777 /home/pi/
+# $SUDO chmod -R 777 /home/pi/
   $SUDO wget http://www.fars-robotics.net/install-wifi -O /usr/bin/install-wifi
   $SUDO chmod +x /usr/bin/install-wifi
   $SUDO install-wifi
@@ -121,24 +121,12 @@ function install_wifi() {
 
 function install_the_things() {
   # installing samba server so you can connect and add files easily
-  echo ":::"
-  echo "::: Installing Samba"
-  $SUDO apt-get install -y samba samba-common-bin > /dev/null
-  echo "::: DONE!"
   # installing minidlna to serve up your shit nicely
-  echo ":::"
-  echo "::: Installing minidlna"
-  $SUDO apt-get install -y minidlna > /dev/null
-  echo "::: DONE!"
   # installing hostapd so it makes the wifi adaper into an access point
-  echo ":::"
-  echo "::: Installing hostapd"
-  $SUDO apt-get install -y hostapd > /dev/null
-  echo "::: DONE!"
   # installing dnsmasq so it can serve up your wifiz
   echo ":::"
-  echo "::: Installing dnsmasq"
-  $SUDO apt-get install -y dnsmasq > /dev/null
+  echo "::: Installing Samba, Minidlna, Hostapd & DNSmasq"
+  $SUDO apt-get install -y samba samba-common-bin minidlna hostapd dnsmasq > /dev/null
   echo "::: DONE installing all the things!"
 }
 
@@ -147,13 +135,13 @@ function edit_samba() {
   echo ":::"
   echo "::: Editing Samba... "
   echo "::: You will enter a password for your Folder Share next."
-  $SUDO smbpasswd -a pi
+  $SUDO smbpasswd -a $var1
   $SUDO cp /etc/samba/smb.conf /etc/samba/smb.conf.bkp
-  $SUDO mkdir /home/pi/Videos
+  $SUDO mkdir ~/videos
 
   echo '[Mediadrive]
         comment = Public Storage
-        path = /home/pi/
+        path = /home/
         create mask = 0775
         directory mask = 0775
         read only = no
@@ -171,8 +159,8 @@ function edit_minidlna() {
   echo -n "::: Editing minidlna"
   $SUDO cp /etc/minidlna.conf /etc/minidlna.conf.bkp
   $SUDO echo 'user=minidlna
-    media_dir=/home/pi/Videos/
-    db_dir=/home/pi/minidlna
+    media_dir=~/videos/
+    db_dir=~/minidlna
     log_dir=/var/log
     port=8200
     inotify=yes
@@ -184,7 +172,7 @@ function edit_minidlna() {
     model_number=1
     root_container=B' > /etc/minidlna.conf
   echo "model_name=$var1" | sudo tee --append /etc/minidlna.conf > /dev/null
-  $SUDO mkdir /home/pi/minidlna
+  $SUDO mkdir ~/minidlna
   $SUDO update-rc.d minidlna defaults
   echo "::: DONE!"
 }
