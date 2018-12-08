@@ -22,6 +22,6 @@ fi
 
 sudo service hostapd restart
 
-sudo /opt/nodejs/lib/node_modules/droppy/droppy.js start -f /home/pi &
+sudo /opt/nodejs/lib/node_modules/droppy/droppy.js start -f /home/ &
 
 exit 0
