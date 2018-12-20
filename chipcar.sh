@@ -250,8 +250,9 @@ function stop_ipv6() {
 	# stopping ipv6
 	echo ":::"
 	echo "::: Stoping ipv6"
-	$SUDO sysctl -w net.ipv6.conf.all.disable_ipv6=1
-	$SUDO sysctl -w net.ipv6.conf.default.disable_ipv6=1
+	echo "net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1" | sudo tee --append /etc/sysctl.conf > /dev/null
 	echo "::: DONE!"
 }
 
