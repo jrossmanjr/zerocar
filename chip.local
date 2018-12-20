@@ -15,5 +15,5 @@ sleep 1
 #sudo /sbin/iwconfig wlan1 power off
 sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
 sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1
-#sudo droppy start -d -c /srv/droppy/config -f / &
+#sudo droppy start -d -c /srv/droppy/config -f /home/ &
 exit 0
