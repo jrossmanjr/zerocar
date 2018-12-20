@@ -159,55 +159,56 @@ function edit_hostapd() {
 DAEMON_CONF="/etc/hostapd/hostapd.conf"' | sudo tee --append /etc/default/hostapd > /dev/null
 
 	$SUDO cp /etc/network/interfaces /etc/network/interfaces.bkp
-  	$SUDO echo '
+	$SUDO echo 'source-directory /etc/network/interfaces.d
 auto lo
 iface lo inet loopback
 
 auto wlan1
+allow-hotplug wlan1
 iface wlan1 inet static
   address 10.0.0.1
   netmask 255.255.255.0' > /etc/network/interfaces
 
   $SUDO echo '
-  interface=wlan1
+interface=wlan1
 
-  # this is the driver that must be used for ath9k and other similar chipset devices
-  driver=nl80211
+# this is the driver that must be used for ath9k and other similar chipset devices
+driver=nl80211
 
-  #add the controll interface for hostapd
-  ctrl_interface=/var/run/Hostapd
-  ctrl_interface_group=0
+#add the controll interface for hostapd
+ctrl_interface=/var/run/Hostapd
+ctrl_interface_group=0
 
-  # yes, it says 802.11g, but the n-speeds get layered on top of it
-  hw_mode=g
+# yes, it says 802.11g, but the n-speeds get layered on top of it
+hw_mode=g
 
-  # this enables the 802.11n speeds and capabilities ...  You will also need to enable WMM for full HT functionality.
-  ieee80211n=1
-  wmm_enabled=1
+# this enables the 802.11n speeds and capabilities ...  You will also need to enable WMM for full HT functionality.
+ieee80211n=1
+wmm_enabled=1
 
-  # self-explanatory, but not all channels may be enabled for you - check /var/log/messages for details
-  channel=6
+# self-explanatory, but not all channels may be enabled for you - check /var/log/messages for details
+channel=6
 
-  # adjust to fit your location
-  country_code=US
+# adjust to fit your location
+country_code=US
 
-  # let your AP broadcast the settings that agree with the above-mentioned regulatory requirements per country
-  ieee80211d=1
+# let your AP broadcast the settings that agree with the above-mentioned regulatory requirements per country
+ieee80211d=1
 
-  # settings for security
-  auth_algs=1
-  wpa=2
-  wpa_key_mgmt=WPA-PSK
-  rsn_pairwise=CCMP
-  macaddr_acl=0
+# settings for security
+auth_algs=1
+wpa=2
+wpa_key_mgmt=WPA-PSK
+sn_pairwise=CCMP
+macaddr_acl=0
 
-  # these have to be set in agreement w/ channel and some other values... read hostapd.conf docs
-  ht_capab=[HT20][SHORT-GI-20][DSSS_CCK-40]
+# these have to be set in agreement w/ channel and some other values... read hostapd.conf docs
+#ht_capab=[HT20][SHORT-GI-20][DSSS_CCK-40]
 
-  # makes the SSID visible and broadcasted
-  ignore_broadcast_ssid=0
+# makes the SSID visible and broadcasted
+ignore_broadcast_ssid=0
 
-  ###############
+###############
   ' > /etc/hostapd.conf
 	echo "ssid=$var2" | sudo tee --append /etc/hostapd.conf > /dev/null
 	echo "wpa_passphrase=$var3" | sudo tee --append /etc/hostapd.conf > /dev/null
