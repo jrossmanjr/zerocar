@@ -223,9 +223,7 @@ ignore_broadcast_ssid=0
 function wpa_supplicant() {
 # setup wpa passwords for your home router
   $SUDO cp /etc/network/interfaces /etc/network/interfaces.bkp
-  $SUDO echo "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-update_config=1
-
+  $SUDO echo "
 network={
 ssid=$var4
 psk=$var5
