@@ -171,7 +171,7 @@ function edit_hostapd() {
 DAEMON_CONF="/etc/hostapd/hostapd.conf"' | sudo tee --append /etc/default/hostapd > /dev/null
 
   $SUDO cp /etc/network/interfaces /etc/network/interfaces.bkp
-  $SUDO echo 'network={
+  $SUDO echo "network={
 ssid=$var4
 psk=$var5
 proto=RSN
@@ -179,7 +179,7 @@ key_mgmt=WPA-PSK
 pairwise=CCMP
 auth_alg=OPEN
 }
-' > /etc/wpa_supplicant/wpa_supplicant.conf
+" > /etc/wpa_supplicant/wpa_supplicant.conf
 
   $SUDO echo '
 # set the interface
