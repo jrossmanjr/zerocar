@@ -62,6 +62,9 @@ var4=$(whiptail --inputbox "What WiFi to connect to" ${r} ${c} HomeRouter --titl
 var5=$(whiptail --passwordbox "Please enter a password for your Home Router" ${r} ${c} --title "Home Router Password" 3>&1 1>&2 2>&3)
 whiptail --msgbox --title "ZeroCar automated installer" "\n\nOk all the data has been entered...The install will now complete!" ${r} ${c}
 
+##############################################################################
+# Functions to setup the rest of the server
+##############################################################################
 
 function update_yo_shit() {
 #updating the distro...
@@ -170,17 +173,6 @@ function edit_hostapd() {
   echo '
 DAEMON_CONF="/etc/hostapd/hostapd.conf"' | sudo tee --append /etc/default/hostapd > /dev/null
 
-  $SUDO cp /etc/network/interfaces /etc/network/interfaces.bkp
-  $SUDO echo "network={
-ssid=$var4
-psk=$var5
-proto=RSN
-key_mgmt=WPA-PSK
-pairwise=CCMP
-auth_alg=OPEN
-}
-" > /etc/wpa_supplicant/wpa_supplicant.conf
-
   $SUDO echo '
 # set the interface
 interface=wlan0
@@ -226,6 +218,23 @@ ignore_broadcast_ssid=0
   echo "wpa_passphrase=$var3" | sudo tee --append /etc/hostapd/hostapd.conf > /dev/null
   $SUDO ln -s /etc/hostapd/hostapd.conf /home/pi/hostapd.conf
   echo "::: DONE!"
+}
+
+function wpa_supplicant() {
+# setup wpa passwords for your home router
+  $SUDO cp /etc/network/interfaces /etc/network/interfaces.bkp
+  $SUDO echo "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+
+network={
+ssid=$var4
+psk=$var5
+proto=RSN
+key_mgmt=WPA-PSK
+pairwise=CCMP
+auth_alg=OPEN
+}
+" > /etc/wpa_supplicant/wpa_supplicant.conf
 }
 
 function edit_dnsmasq() {
@@ -282,14 +291,6 @@ function fix_startup() {
   echo "::: DONE!"
 }
 
-function restart_Pi() {
-  # restarting
-  echo ":::"
-  echo "::: It is finished..."
-  echo "::: please restart the Pi. -- suggest sudo reboot"
-
-}
-
 function install_node() {
   # update Node.js, NPM and install Droppy to allow for web file serving
   echo ":::"
@@ -299,6 +300,14 @@ function install_node() {
   $SUDO npm install -g droppy
   echo ":::"
   echo "::: DONE!"
+}
+
+function restart_Pi() {
+  # restarting
+  echo ":::"
+  echo "::: It is finished..."
+  echo "::: please restart the Pi. -- suggest sudo reboot"
+
 }
 
 
@@ -315,4 +324,5 @@ edit_dhcpdconf
 edit_autostart
 fix_startup
 install_wifi
+wpa_supplicant
 restart_Pi
