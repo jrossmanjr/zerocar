@@ -213,7 +213,6 @@ wpa=2
 wpa_key_mgmt=WPA-PSK
 wpa_pairwise=CCMP TKIP
 rsn_pairwise=CCMP
-macaddr_acl=0
 
 # these have to be set in agreement w/ channel and some other values... read hostapd.conf docs
 #ht_capab=[HT20][SHORT-GI-20][DSSS_CCK-40]
