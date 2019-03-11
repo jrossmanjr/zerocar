@@ -11,9 +11,8 @@
 # alot of help came from ADAFRUIT: https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/install-software
 # tahnkyou to SDESALAS who made a schweet node script -- https://github.com/sdesalas/node-pi-zero
 # huge thanks to silverwind who made Droppy...makes managing the files much easier thru the web : https://github.com/silverwind/droppy
+# used code from RaspberryConnect.com to setup auto hotspot or home wifi connect to allow for ease of loading files over wifi. http://www.raspberryconnect.com/network/item/331-raspberry-pi-auto-wifi-hotspot-switch-direct-connection
 
-
-# Run this script as root or under sudo
 echo ":::
 ███████╗███████╗██████╗  ██████╗  ██████╗ █████╗ ██████╗
 ╚══███╔╝██╔════╝██╔══██╗██╔═══██╗██╔════╝██╔══██╗██╔══██╗
@@ -37,6 +36,8 @@ c=$(( columns / 2 ))
 r=$(( r < 20 ? 20 : r ))
 c=$(( c < 70 ? 70 : c ))
 
+
+# Run this script as root or under sudo
 if [[ $EUID -eq 0 ]];then
   echo "::: You are root."
 else
@@ -51,39 +52,19 @@ else
   fi
 fi
 
+# Into popups and variable setup
 whiptail --msgbox --title "ZeroCar automated installer" "\nThis installer turns your Raspberry Pi and Wifi Dongle into \nan awesome WiFi router and media streamer!" ${r} ${c}
-
 whiptail --msgbox --title "ZeroCar automated installer" "\n\nFirst things first... Lets set up some variables!" ${r} ${c}
-
 var1=$(whiptail --inputbox "Name the DLNA Server" ${r} ${c} ZeroCar --title "DLNA Name" 3>&1 1>&2 2>&3)
-
-var9=$(whiptail --title "What you rocking under the hood?" --radiolist "How many WiFi adapters are you running?" ${r} ${c} 2 \
-"One" "One Adapter" ON \
-"Two" "Two Adapters" OFF 3>&1 1>&2 2>&3)
-
-exitstatus=$?
-if [ $exitstatus = 0 ]; then
-    echo "The chosen distro is:" $var9
-else
-    echo "You chose Cancel."
-fi
-
-
-if [ $var9 = Two ]; then
-	var2=$(whiptail --inputbox "Name the WiFi Hotspot" ${r} ${c} ZeroCar --title "Wifi Name" 3>&1 1>&2 2>&3)
-	var3=$(whiptail --passwordbox "Please enter a password for the WiFi hotspot" ${r} ${c} --title "WiFi Password" 3>&1 1>&2 2>&3)
-	var4=$(whiptail --inputbox "What WiFi to connect to" ${r} ${c} HomeRouter --title "Router Name" 3>&1 1>&2 2>&3)
-	var5=$(whiptail --passwordbox "Please enter a password for your Home Router" ${r} ${c} --title "Router Password" 3>&1 1>&2 2>&3)
-else
-	var2=$(whiptail --inputbox "Name the WiFi Hotspot" ${r} ${c} ZeroCar --title "Wifi Name" 3>&1 1>&2 2>&3)
-	var3=$(whiptail --passwordbox "Please enter a password for the WiFi Hotspot" ${r} ${c} --title "WiFi Password" 3>&1 1>&2 2>&3)
-fi
-
+var2=$(whiptail --inputbox "Name the WiFi Hotspot" ${r} ${c} ZeroCar --title "Wifi Name" 3>&1 1>&2 2>&3)
+var3=$(whiptail --passwordbox "Please enter a password for the WiFi hotspot" ${r} ${c} --title "WiFi Password" 3>&1 1>&2 2>&3)
+var4=$(whiptail --inputbox "What WiFi to connect to" ${r} ${c} HomeRouter --title "Home Router Name" 3>&1 1>&2 2>&3)
+var5=$(whiptail --passwordbox "Please enter a password for your Home Router" ${r} ${c} --title "Home Router Password" 3>&1 1>&2 2>&3)
 whiptail --msgbox --title "ZeroCar automated installer" "\n\nOk all the data has been entered...The install will now complete!" ${r} ${c}
 
 
 function update_yo_shit() {
-  #updating the distro...
+#updating the distro...
   echo ":::"
   echo "::: Running an update to your distro"
   $SUDO apt update
@@ -91,17 +72,18 @@ function update_yo_shit() {
 }
 
 function delete_crap() {
-  # delete all the junk that has nothing to do with being a lightweight server
+# delete all the junk that has nothing to do with being a lightweight server
   echo ":::"
   echo "::: Removing JUNK...from the trunk"
   $SUDO apt-get -y purge minecraft-pi python-minecraftpi wolfram-engine sonic-pi libreoffice scratch
+  $SUDO apt-get purge dns-root-data
   $SUDO apt-get autoremove
   $SUDO apt-get purge
   echo "::: DONE!"
 }
 
 function upgrade_yo_shit() {
-  #updating the distro...
+#updating the distro...
   echo ":::"
   echo "::: Running upgrades"
   $SUDO apt upgrade -y
@@ -109,10 +91,9 @@ function upgrade_yo_shit() {
 }
 
 function install_wifi() {
-  # installing wifi drivers
+# installing wifi drivers for rtl8188eu chipset
   echo ":::"
   echo "::: Installing wifi drivers"
-# $SUDO chmod -R 777 /home/pi/
   $SUDO wget http://www.fars-robotics.net/install-wifi -O /usr/bin/install-wifi
   $SUDO chmod +x /usr/bin/install-wifi
   $SUDO install-wifi
@@ -124,9 +105,12 @@ function install_the_things() {
   # installing minidlna to serve up your shit nicely
   # installing hostapd so it makes the wifi adaper into an access point
   # installing dnsmasq so it can serve up your wifiz
+  # installing iw so it has the tools for the autoselect script
   echo ":::"
   echo "::: Installing Samba, Minidlna, Hostapd & DNSmasq"
-  $SUDO apt-get install -y samba samba-common-bin minidlna hostapd dnsmasq > /dev/null
+  $SUDO apt-get install -y samba samba-common-bin minidlna hostapd dnsmasq iw > /dev/null
+  $SUDO systemctl disable hostapd
+  $SUDO systemctl disable dnsmasq
   echo "::: DONE installing all the things!"
 }
 
@@ -135,6 +119,7 @@ function edit_samba() {
   echo ":::"
   echo "::: Editing Samba... "
   echo "::: You will enter a password for your Folder Share next."
+  $SUDO chmod -R 777 /home/pi/
   $SUDO smbpasswd -a $var1
   $SUDO cp /etc/samba/smb.conf /etc/samba/smb.conf.bkp
   $SUDO mkdir ~/videos
@@ -166,7 +151,7 @@ function edit_minidlna() {
     inotify=yes
     enable_tivo=no
     strict_dlna=no
-    album_art_names=Cover.jpg/cover.jpg/AlbumArtSmall.jpg/albumartsmall.jpg/AlbumArt.jpg/albumart.jpg/Album.jpg/album.jpg/Folder.jpg/folder.jpg/Thumb.jpg/thumb.jpg/movie.tbn/movie.jpg
+    album_art_names=Folder.jpg/folder.jpg/Thumb.jpg/thumb.jpg/movie.tbn/movie.jpg
     notify_interval=900
     serial=12345678
     model_number=1
@@ -186,25 +171,7 @@ function edit_hostapd() {
 DAEMON_CONF="/etc/hostapd/hostapd.conf"' | sudo tee --append /etc/default/hostapd > /dev/null
 
   $SUDO cp /etc/network/interfaces /etc/network/interfaces.bkp
-
-if [ $var9 = Two ]; then
-  $SUDO echo 'source-directory /etc/network/interfaces.d
-auto lo
-iface lo inet loopback
-
-iface eth0 inet dhcp
-
-allow-hotplug wlan0
-iface wlan0 inet static
-address 10.0.0.1
-netmask 255.255.255.0
-
-allow-hotplug wlan1
-iface wlan1 inet dhcp
-wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
-' > /etc/network/interfaces
-
-	$SUDO echo 'network={
+  $SUDO echo 'network={
 ssid=$var4
 psk=$var5
 proto=RSN
@@ -213,34 +180,25 @@ pairwise=CCMP
 auth_alg=OPEN
 }
 ' > /etc/wpa_supplicant/wpa_supplicant.conf
-else
-	$SUDO echo 'source-directory /etc/network/interfaces.d
-auto lo
-iface lo inet loopback
 
-iface eth0 inet dhcp
-
-allow-hotplug wlan0
-iface wlan0 inet static
-address 10.0.0.1
-netmask 255.255.255.0' > /etc/network/interfaces
-fi
-
- $SUDO echo '
+  $SUDO echo '
+# set the interface
 interface=wlan0
 
 # this is the driver that must be used for ath9k and other similar chipset devices
 driver=nl80211
 
-#add the controll interface for hostapd
+# add the controll interface for hostapd
 ctrl_interface=/var/run/Hostapd
 ctrl_interface_group=0
 
 # yes, it says 802.11g, but the n-speeds get layered on top of it
 hw_mode=g
+macaddr_acl=0
 
 # this enables the 802.11n speeds and capabilities ...  You will also need to enable WMM for full HT functionality.
 ieee80211n=1
+ieee80211d=1
 wmm_enabled=1
 
 # self-explanatory, but not all channels may be enabled for you - check /var/log/messages for details
@@ -249,23 +207,21 @@ channel=6
 # adjust to fit your location
 country_code=US
 
-# let your AP broadcast the settings that agree with the above-mentioned regulatory requirements per country
-ieee80211d=1
-
 # settings for security
 auth_algs=1
 wpa=2
 wpa_key_mgmt=WPA-PSK
+wpa_pairwise=CCMP TKIP
 rsn_pairwise=CCMP
 macaddr_acl=0
 
 # these have to be set in agreement w/ channel and some other values... read hostapd.conf docs
-ht_capab=[HT20][SHORT-GI-20][DSSS_CCK-40]
+#ht_capab=[HT20][SHORT-GI-20][DSSS_CCK-40]
 
 # makes the SSID visible and broadcasted
 ignore_broadcast_ssid=0
 
-###############
+
 ' > /etc/hostapd/hostapd.conf
   echo "ssid=$var2" | sudo tee --append /etc/hostapd/hostapd.conf > /dev/null
   echo "wpa_passphrase=$var3" | sudo tee --append /etc/hostapd/hostapd.conf > /dev/null
@@ -278,15 +234,50 @@ function edit_dnsmasq() {
   echo ":::"
   echo "::: Editing dnsmasq"
   $SUDO echo '
+#stop DNSmasq from using resolv.conf
+no-resolv
+#Interface to use
 interface=wlan0
-dhcp-range=10.0.0.2,10.0.0.9,255.255.255.0,12h' | sudo tee --append /etc/dnsmasq.conf > /dev/null
+bind-interfaces
+dhcp-range=10.0.0.2,10.0.0.150,255.255.255.0,12h' | sudo tee --append /etc/dnsmasq.conf > /dev/null
+  echo "::: DONE!"
+}
+
+function edit_dhcpdconf() {
+  # editing dhcpcd to stop it from starting the wifi network so the autostart script can
+  echo ":::"
+  echo "::: Editing dhcpd.conf"
+  $SUDO echo '
+nohook wpa_supplicant' | sudo tee --append /etc/dhcpcd.conf > /dev/null
+  echo "::: DONE!"
+}
+
+function edit_autostart() {
+  # editing dnsmasq so it can serve up your wifiz
+  echo ":::"
+  echo "::: Editing autostart service"
+  $SUDO echo '
+[Unit]
+Description=Automatically generates a Hotspot when a valid SSID is in range
+After=multi-user.target
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/autohotspot
+[Install]
+WantedBy=multi-user.target
+' > /etc/systemd/system/autohotspot.service
+  $SUDO systemctl enable autohotspot.service
   echo "::: DONE!"
 }
 
 function fix_startup() {
-  # restart the wifi as last function on startup
+  # move autoscript, rc.local, and make both executable 
   echo ":::"
-  echo "::: Fixing the wifi at startup"
+  echo "::: Moving scripts for startup"
+  $SUDO cp autohotspot.sh /usr/bin/autohotspot
+  $SUDO chmod +x /usr/bin/autohotspot
+
   $SUDO cp rc.local /etc/rc.local
   $SUDO chmod +x /etc/rc.local
   echo "::: DONE!"
@@ -296,7 +287,6 @@ function restart_Pi() {
   # restarting
   echo ":::"
   echo "::: It is finished..."
-  $SUDO service hostapd start && sudo /etc/init.d/dnsmasq restart
   echo "::: please restart the Pi. -- suggest sudo reboot"
 
 }
@@ -322,6 +312,8 @@ edit_samba
 edit_minidlna
 edit_hostapd
 edit_dnsmasq
+edit_dhcpdconf
+edit_autostart
 fix_startup
 install_wifi
 restart_Pi
