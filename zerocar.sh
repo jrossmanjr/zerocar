@@ -122,7 +122,6 @@ function edit_samba() {
   echo ":::"
   echo "::: Editing Samba... "
   echo "::: You will enter a password for your Folder Share next."
-  $SUDO chmod -R 777 /home/pi/
   $SUDO smbpasswd -a $var1
   $SUDO cp /etc/samba/smb.conf /etc/samba/smb.conf.bkp
   $SUDO mkdir ~/videos
@@ -302,6 +301,7 @@ function install_node() {
 
 function restart_Pi() {
   # restarting
+  $SUDO chmod -R 777 /home/pi/
   echo ":::"
   echo "::: It is finished..."
   echo "::: please restart the Pi. -- suggest sudo reboot"
