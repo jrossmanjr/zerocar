@@ -238,7 +238,7 @@ no-resolv
 #Interface to use
 interface=wlan0
 bind-interfaces
-dhcp-range=10.0.0.2,10.0.0.150,255.255.255.0,12h' | sudo tee --append /etc/dnsmasq.conf > /dev/null
+dhcp-range=10.0.0.10,10.0.0.150,255.255.255.0,12h' | sudo tee --append /etc/dnsmasq.conf > /dev/null
   echo "::: DONE!"
 }
 
