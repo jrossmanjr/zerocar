@@ -1,78 +1,75 @@
 # ZeroCar
-Used to deploy a RaspberryPi Zero DLNA server for in the car
+Used to deploy a RaspberryPi DLNA server via a hotspot
+
+I use this as a portable server for the kids' iPads while in the car or flying on trips. 
     
 - Raspberry Pi Setup:
-    - So how I set this up is to have a Raspberry Pi Zero or Zero W hooked up to a USB hub
-        - I like the UUGear one http://www.uugear.com/product/zero4u/ or https://www.adafruit.com/products/3298
-        - On that hub have: 
-            - WiFi dongle you are attempting to use - I usually use a TPLINK TL-WN725N (not needed if you have the wireless zero)
-            - USB Ethernet adapter
-            - Keyboard
-            - HDMI Monitor -- not necessairly needed (you can SSH in if you want)
+    - This was built for the Raspberry Pi Zero W 
             
-    - "Burn" the raspbian image of your choice to the SD card with another computer
-        - Try Etcher by resin.io -- www.etcher.io
+    - "Burn" the Raspbian image of your choice to the SD card with another computer
+        - Try Etcher by resin.io -- https://www.balena.io/etcher/
     
-    - Install the SD card to the pi and boot
+    - To allow for SSH access: https://bit.ly/2VUi53V
+        - You can add a file to the boot partition called "ssh"
+       ```
+       touch ssh
+       ```
+        - OR...Create a blank txt file and save it to the boot partition as ssh.txt
+
+    - have the RPi auto connect to you home router on boot so you can ssh in
+        - Create a file in your text editor of choice called "wpa_supplicant.conf" with the below in the file
+        ```
+        ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+        update_config=1
+
+        network={
+            ssid="WIFI_ROUTER_NAME"
+            psk="WIFI_ROUTER_PASSWORD"
+            proto=RSN
+            key_mgmt=WPA-PSK
+            pairwise=CCMP
+            auth_alg=OPEN
+        }
+        ```
+        - Save the config file in the boot partition 
+
+    - Install the SD card to the RPi and boot
     
-    - At this point run -- `sudo raspi-config`
-        - setup the keyboard in internationalization tools 
+    - SSH into the RPi through Putty or Terminal of choice https://bit.ly/2UzWyNA
+
+    - Log in and run -- `sudo raspi-config`
+        - Setup the keyboard in internationalization tools so it's configured correctly
     
     - Run -- 
         ```
+        sudo apt update
+        sudo apt upgrade
+        sudo apt install git
         git clone https://github.com/jrossmanjr/zerocar.git
         cd zerocar/
         chmod +x zerocar.sh
         sudo ./zerocar.sh
         ```
         - Fill in data for the prompts!
-    
-    
-- C.H.I.P. Setup:
-    - Use a powered USB hub and Flash the C.H.I.P. 
-        - TO FLASH -- http://flash.getchip.com/
-        - OR -
-            - See here for a Raspberry Pi based flasher - https://bbs.nextthing.co/t/chip-flasher-pi/21096
-            - See here for Posts on Chip preservation efforts - https://www.reddit.com/r/ChipCommunity/comments/8ey1iv/ongoing_chip_preservation_efforts/
-        - On that hub have: 
-            - Keyboard
-            - VGA/HDMI Monitor
-            
-    - Boot in and connect to your Local WiFi 
-
-    - Run -- 
-        ```
-        git clone https://github.com/jrossmanjr/zerocar.git
-        cd zerocar/
-        chmod +x chipcar.sh
-        sudo ./chipcar.sh
-        ```
-        
-- The installer for Pi or C.H.I.P. will prompt you for:
-    - SMB Password - so you can connect thru SMB to drop files
+      
+- The installer will prompt you for:
+    - SMB Password - so you can connect thru SMB to drop files in 
     - DLNA Server Name - so you can have a cool name in the DLNA browser of choice
     - SSID Name - Name your WiFi hotspot
-    - SSID Password - give it a password to keep jerks out of your shit
+    - Hotspot Password - give the hotspot a password to keep jerks out of your stuff
+    - SSID Name of Home Router - this is so when you turn it on at your house it connects to tyour home wifi for updates over ssh or to drop files in 
+    - Home Router Password
 
 - Access Droppy (Droppy info: https://github.com/silverwind/droppy )
-    - after the first reboot go to ``` 10.0.0.1:8989 ``` to access the Droppy interface
-    - drop in files!
+    - After the first reboot go to ``` 10.0.0.1:8989 ``` to access the Droppy interface
+    - Drop in files!
     
 -------------------------------------------------------------------------------------------------------------------------
+Future
+- want to harden the OS to make it mostly read only -- to help with SD card corruption
 
-Raspberry Pi PARTS LIST!
-- Raspberry Pi Zero ```https://www.adafruit.com/product/2885 ```
-- Zero4U ``` https://www.adafruit.com/product/3298 or http://www.uugear.com/product/zero4u/ ```
-- Micro SD - 8gb or bigger if you want the files directly on the server
-- WiFi module TPLINK TL-WN725N ``` https://www.amazon.com/TP-Link-N150-Wireless-Adapter-TL-WN725N/dp/B008IFXQFU ```
-- USB Drives - if you want to use the thumb drive technique - just get a big one for all your shows and movies (~128 GB)
 
-C.H.I.P. PARTS LIST!
-- Next Thing Co C.H.I.P. ```https://getchip.com/ ```
-- USB Drives - just get a big one for all your shows and movies (~128 GB)
 
-EXTRA - for setup
-- Keyboard
-- Monitor 
-- Mini HDMI adapter ``` https://www.amazon.com/Cablelera-Female-Adapter-Black-ZA5100FM/dp/B011ESUXZI/ ```
-- USB Ethernet ``` https://www.amazon.com/AmazonBasics-USB-Ethernet-Network-Adapter/dp/B00M77HLII/ ```
+-------------------------------------------------------------------------------------------------------------------------
+
+

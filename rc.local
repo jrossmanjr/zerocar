@@ -20,8 +20,6 @@ if [ "$_IP" ]; then
   printf "My IP address is %s\n" "$_IP"
 fi
 
-sudo service hostapd restart
-
 sudo /opt/nodejs/lib/node_modules/droppy/droppy.js start -f /home/ &
 
 exit 0
