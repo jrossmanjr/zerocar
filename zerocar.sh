@@ -1,17 +1,14 @@
 #!/usr/bin/env bash
 # ZeroCar Install Script
-# (c) 2016 by jrossmanjr
+# by jrossmanjr -- https://github.com/jrossmnajr/zerocar
 # Use a RaspberryPi as a WiFi hotspot to serve up files
-# RaspiCar is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 2 of the License, or
-# (at your option) any later version.
-# shoutout to the folks making PiHole, Adafruit, & PIRATEBOX for showing me the way and essentially teaching me to code for the Pi...
-# thanks to MrEngman for making the wifi installer!! more info: https://www.raspberrypi.org/forums/viewtopic.php?p=462982
-# alot of help came from ADAFRUIT: https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/install-software
-# tahnkyou to SDESALAS who made a schweet node script -- https://github.com/sdesalas/node-pi-zero
-# huge thanks to silverwind who made Droppy...makes managing the files much easier thru the web : https://github.com/silverwind/droppy
-# used code from RaspberryConnect.com to setup auto hotspot or home wifi connect to allow for ease of loading files over wifi. http://www.raspberryconnect.com/network/item/331-raspberry-pi-auto-wifi-hotspot-switch-direct-connection
+
+# Shoutout to the folks making PiHole, Adafruit, & PIRATEBOX for showing me the way and essentially teaching me to code for the Pi...
+# Thanks to MrEngman for making the wifi installer!! more info: https://www.raspberrypi.org/forums/viewtopic.php?p=462982
+# A lot of help came from ADAFRUIT: https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/install-software
+# Thanks to SDESALAS who made a schweet node install script: https://github.com/sdesalas/node-pi-zero
+# Huge thanks to silverwind who made Droppy...makes managing the files much easier thru the web : https://github.com/silverwind/droppy
+# Thanks to RaspberryConnect.com for some refinement of the setup code
 
 echo ":::
 ███████╗███████╗██████╗  ██████╗  ██████╗ █████╗ ██████╗
@@ -22,7 +19,7 @@ echo ":::
 ╚══════╝╚══════╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝
 
 
-    By - jrossmanjr   //   https://github.com/jrossmnajr/ZeroCar             "
+    By - jrossmanjr   //   https://github.com/jrossmnajr/zerocar             "
 
 # Find the rows and columns will default to 80x24 is it can not be detected
 screen_size=$(stty size 2>/dev/null || echo 24 80)
@@ -57,16 +54,14 @@ whiptail --msgbox --title "ZeroCar automated installer" "\nThis installer turns 
 whiptail --msgbox --title "ZeroCar automated installer" "\n\nFirst things first... Lets set up some variables!" ${r} ${c}
 var1=$(whiptail --inputbox "Name the DLNA Server" ${r} ${c} ZeroCar --title "DLNA Name" 3>&1 1>&2 2>&3)
 var2=$(whiptail --inputbox "Name the WiFi Hotspot" ${r} ${c} ZeroCar --title "Wifi Name" 3>&1 1>&2 2>&3)
-var3=$(whiptail --passwordbox "Please enter a password for the WiFi hotspot" ${r} ${c} --title "WiFi Password" 3>&1 1>&2 2>&3)
-var4=$(whiptail --inputbox "What WiFi to connect to" ${r} ${c} HomeRouter --title "Home Router Name" 3>&1 1>&2 2>&3)
-var5=$(whiptail --passwordbox "Please enter a password for your Home Router" ${r} ${c} --title "Home Router Password" 3>&1 1>&2 2>&3)
+var3=$(whiptail --passwordbox "Please enter a password for the WiFi hotspot" ${r} ${c} --title "HotSpot Password" 3>&1 1>&2 2>&3)
 whiptail --msgbox --title "ZeroCar automated installer" "\n\nOk all the data has been entered...The install will now complete!" ${r} ${c}
 
 ##############################################################################
 # Functions to setup the rest of the server
 ##############################################################################
 
-function update_yo_shit() {
+function update_pi() {
 #updating the distro...
   echo ":::"
   echo "::: Running an update to your distro"
@@ -74,18 +69,17 @@ function update_yo_shit() {
   echo "::: DONE!"
 }
 
-function delete_crap() {
+function delete_junk() {
 # delete all the junk that has nothing to do with being a lightweight server
   echo ":::"
   echo "::: Removing JUNK...from the trunk"
-  $SUDO apt-get -y purge minecraft-pi python-minecraftpi wolfram-engine sonic-pi libreoffice scratch
-  $SUDO apt-get purge dns-root-data
+  $SUDO apt-get -y purge dns-root-data minecraft-pi python-minecraftpi wolfram-engine sonic-pi libreoffice scratch
   $SUDO apt-get autoremove
   $SUDO apt-get purge
   echo "::: DONE!"
 }
 
-function upgrade_yo_shit() {
+function upgrade_pi() {
 #updating the distro...
   echo ":::"
   echo "::: Running upgrades"
@@ -111,9 +105,7 @@ function install_the_things() {
   # installing iw so it has the tools for the autoselect script
   echo ":::"
   echo "::: Installing Samba, Minidlna, Hostapd & DNSmasq"
-  $SUDO apt-get install -y samba samba-common-bin minidlna hostapd dnsmasq iw > /dev/null
-  $SUDO systemctl disable hostapd
-  $SUDO systemctl disable dnsmasq
+  $SUDO apt install -y samba samba-common-bin minidlna hostapd dnsmasq iw 
   echo "::: DONE installing all the things!"
 }
 
@@ -153,7 +145,7 @@ function edit_minidlna() {
     inotify=yes
     enable_tivo=no
     strict_dlna=no
-    album_art_names=Folder.jpg/folder.jpg/Thumb.jpg/thumb.jpg/movie.tbn/movie.jpg
+    album_art_names=Folder.jpg/folder.jpg/Thumb.jpg/thumb.jpg/movie.tbn/movie.jpg/Poster.jpg/poster.jpg
     notify_interval=900
     serial=12345678
     model_number=1
@@ -180,12 +172,12 @@ interface=wlan0
 driver=nl80211
 
 # add the controll interface for hostapd
-ctrl_interface=/var/run/Hostapd
-ctrl_interface_group=0
+#ctrl_interface=/var/run/hostapd
+#ctrl_interface_group=0
 
 # yes, it says 802.11g, but the n-speeds get layered on top of it
 hw_mode=g
-macaddr_acl=0
+
 
 # this enables the 802.11n speeds and capabilities ...  You will also need to enable WMM for full HT functionality.
 ieee80211n=1
@@ -204,14 +196,13 @@ wpa=2
 wpa_key_mgmt=WPA-PSK
 wpa_pairwise=CCMP TKIP
 rsn_pairwise=CCMP
+macaddr_acl=0
 
 # these have to be set in agreement w/ channel and some other values... read hostapd.conf docs
-#ht_capab=[HT20][SHORT-GI-20][DSSS_CCK-40]
+ht_capab=[HT20][SHORT-GI-20][DSSS_CCK-40]
 
 # makes the SSID visible and broadcasted
 ignore_broadcast_ssid=0
-
-
 ' > /etc/hostapd/hostapd.conf
   echo "ssid=$var2" | sudo tee --append /etc/hostapd/hostapd.conf > /dev/null
   echo "wpa_passphrase=$var3" | sudo tee --append /etc/hostapd/hostapd.conf > /dev/null
@@ -219,31 +210,14 @@ ignore_broadcast_ssid=0
   echo "::: DONE!"
 }
 
-function wpa_supplicant() {
-# setup wpa passwords for your home router
-  $SUDO cp /etc/network/interfaces /etc/network/interfaces.bkp
-  $SUDO echo "
-network={
-ssid=$var4
-psk=$var5
-proto=RSN
-key_mgmt=WPA-PSK
-pairwise=CCMP
-auth_alg=OPEN
-}
-" > /etc/wpa_supplicant/wpa_supplicant.conf
-}
-
 function edit_dnsmasq() {
   # editing dnsmasq so it can serve up your wifiz
   echo ":::"
   echo "::: Editing dnsmasq"
   $SUDO echo '
-#stop DNSmasq from using resolv.conf
-no-resolv
-#Interface to use
 interface=wlan0
-bind-interfaces
+domain-needed
+bogus-priv
 dhcp-range=10.0.0.10,10.0.0.150,255.255.255.0,12h' | sudo tee --append /etc/dnsmasq.conf > /dev/null
   echo "::: DONE!"
 }
@@ -253,26 +227,8 @@ function edit_dhcpdconf() {
   echo ":::"
   echo "::: Editing dhcpd.conf"
   $SUDO echo '
-nohook wpa_supplicant' | sudo tee --append /etc/dhcpcd.conf > /dev/null
-  echo "::: DONE!"
-}
-
-function edit_autostart() {
-  # editing dnsmasq so it can serve up your wifiz
-  echo ":::"
-  echo "::: Editing autostart service"
-  $SUDO echo '
-[Unit]
-Description=Automatically generates a Hotspot when a valid SSID is in range
-After=multi-user.target
-[Service]
-Type=oneshot
-RemainAfterExit=yes
-ExecStart=/usr/bin/autohotspot
-[Install]
-WantedBy=multi-user.target
-' > /etc/systemd/system/autohotspot.service
-  $SUDO systemctl enable autohotspot.service
+nohook wpa_supplicant
+interface wlan0' | sudo tee --append /etc/dhcpcd.conf > /dev/null
   echo "::: DONE!"
 }
 
@@ -280,9 +236,6 @@ function fix_startup() {
   # move autoscript, rc.local, and make both executable 
   echo ":::"
   echo "::: Moving scripts for startup"
-  $SUDO cp autohotspot.sh /usr/bin/autohotspot
-  $SUDO chmod +x /usr/bin/autohotspot
-
   $SUDO cp rc.local /etc/rc.local
   $SUDO chmod +x /etc/rc.local
   echo "::: DONE!"
@@ -301,17 +254,18 @@ function install_node() {
 
 function restart_Pi() {
   # restarting
+  echo "::: Finishing touches..."
   $SUDO chmod -R 777 /home/pi/
+  $SUDO systemctl enable hostapd
+  $SUDO systemctl enable dnsmasq
   echo ":::"
-  echo "::: It is finished..."
-  echo "::: please restart the Pi. -- suggest sudo reboot"
-
+  echo "::: please restart the Pi. ----> sudo reboot  <----"
 }
 
 
-update_yo_shit
-delete_crap
-upgrade_yo_shit
+update_pi
+delete_junk
+upgrade_pi
 install_the_things
 install_node
 edit_samba
@@ -319,8 +273,6 @@ edit_minidlna
 edit_hostapd
 edit_dnsmasq
 edit_dhcpdconf
-edit_autostart
 fix_startup
 install_wifi
-wpa_supplicant
 restart_Pi
