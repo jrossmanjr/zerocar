@@ -4,7 +4,7 @@ Used to deploy a RaspberryPi DLNA server via a hotspot
 I use this as a portable server for the kids' iPads while in the car or flying on trips. 
     
 - Raspberry Pi Setup:
-    - This was built for the Raspberry Pi Zero / Zero W 
+    - This was built for the Raspberry Pi Zero W 
             
     - "Burn" the Raspbian image of your choice to the SD card with another computer
         - Try Etcher by resin.io -- https://www.balena.io/etcher/
@@ -14,7 +14,7 @@ I use this as a portable server for the kids' iPads while in the car or flying o
        ```
        touch ssh
        ```
-        - Create a blank txt file and save it to the boot partition as ssh.txt
+        - OR...Create a blank txt file and save it to the boot partition as ssh.txt
 
     - have the RPi auto connect to you home router on boot so you can ssh in
         - Create a file in your text editor of choice called "wpa_supplicant.conf" with the below in the file
@@ -31,7 +31,8 @@ I use this as a portable server for the kids' iPads while in the car or flying o
             auth_alg=OPEN
         }
         ```
-    
+        - Save the config file in the boot partition 
+
     - Install the SD card to the RPi and boot
     
     - SSH into the RPi through Putty or Terminal of choice https://bit.ly/2UzWyNA
