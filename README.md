@@ -66,7 +66,7 @@ I use this as a portable server for the kids' iPads while in the car or flying o
     
 -------------------------------------------------------------------------------------------------------------------------
 Future
-- want to harden the OS to make it mostly read only if able to help with SD card corruption
+- want to harden the OS to make it mostly read only -- to help with SD card corruption
 
 
 
