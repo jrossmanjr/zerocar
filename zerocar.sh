@@ -114,7 +114,7 @@ function edit_samba() {
   echo ":::"
   echo "::: Editing Samba... "
   echo "::: You will enter a password for your Folder Share next."
-  $SUDO smbpasswd -a $var1
+  $SUDO smbpasswd -a pi
   $SUDO cp /etc/samba/smb.conf /etc/samba/smb.conf.bkp
   $SUDO mkdir ~/videos
 
