@@ -256,10 +256,17 @@ function restart_Pi() {
   # restarting
   echo "::: Finishing touches..."
   $SUDO chmod -R 777 /home/pi/
+  $SUDO systemctl unmask hostapd
   $SUDO systemctl enable hostapd
+  $SUDO systemctl start hostapd
+  $SUDO systemctl unmask dnsmasq
   $SUDO systemctl enable dnsmasq
+  $SUDO systemctl start dnsmasq
   echo ":::"
-  echo "::: please restart the Pi. ----> sudo reboot  <----"
+  echo "::: Pi will restart in 5 seconds"
+  wait 5
+  $SUDO reboot
+  echo "~~~~~REBOOTING!~~~~~"
 }
 
 
