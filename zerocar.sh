@@ -257,10 +257,10 @@ function restart_Pi() {
   echo "::: Finishing touches..."
   $SUDO chmod -R 777 /home/pi/
   $SUDO systemctl unmask hostapd
-  $SUDO systemctl enable hostapd
-  $SUDO systemctl start hostapd
   $SUDO systemctl unmask dnsmasq
+  $SUDO systemctl enable hostapd
   $SUDO systemctl enable dnsmasq
+  $SUDO systemctl start hostapd
   $SUDO systemctl start dnsmasq
   echo ":::"
   echo "::: Pi will restart in 5 seconds"
