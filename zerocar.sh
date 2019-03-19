@@ -228,7 +228,10 @@ function edit_dhcpdconf() {
   echo "::: Editing dhcpd.conf"
   $SUDO echo '
 nohook wpa_supplicant
-interface wlan0' | sudo tee --append /etc/dhcpcd.conf > /dev/null
+interface wlan0
+static ip_address=10.0.0.1/24
+static routers=10.0.0.1
+static domain_name_server=10.0.0.1 1.1.1.1 8.8.8.8' | sudo tee --append /etc/dhcpcd.conf > /dev/null
   echo "::: DONE!"
 }
 
