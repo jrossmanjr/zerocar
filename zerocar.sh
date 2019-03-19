@@ -9,6 +9,7 @@
 # Thanks to SDESALAS who made a schweet node install script: https://github.com/sdesalas/node-pi-zero
 # Huge thanks to silverwind who made Droppy...makes managing the files much easier thru the web : https://github.com/silverwind/droppy
 # Thanks to RaspberryConnect.com for some refinement of the setup code
+# RaspiAP by billz is the shit -- https://github.com/billz/raspap-webgui
 
 echo ":::
 ███████╗███████╗██████╗  ██████╗  ██████╗ █████╗ ██████╗
@@ -51,22 +52,18 @@ fi
 
 # Into popups and variable setup
 whiptail --msgbox --title "ZeroCar automated installer" "\nThis installer turns your Raspberry Pi and Wifi Dongle into \nan awesome WiFi router and media streamer!" ${r} ${c}
-whiptail --msgbox --title "ZeroCar automated installer" "\n\nFirst things first... Lets set up some variables!" ${r} ${c}
-var1=$(whiptail --inputbox "Name the DLNA Server" ${r} ${c} ZeroCar --title "DLNA Name" 3>&1 1>&2 2>&3)
-var2=$(whiptail --inputbox "Name the WiFi Hotspot" ${r} ${c} ZeroCar --title "Wifi Name" 3>&1 1>&2 2>&3)
-var3=$(whiptail --passwordbox "Please enter a password for the WiFi hotspot" ${r} ${c} --title "HotSpot Password" 3>&1 1>&2 2>&3)
-whiptail --msgbox --title "ZeroCar automated installer" "\n\nOk all the data has been entered...The install will now complete!" ${r} ${c}
+#whiptail --msgbox --title "ZeroCar automated installer" "\n\nFirst things first... Lets set up some variables!" ${r} ${c}
+#var1=$(whiptail --inputbox "Name the DLNA Server" ${r} ${c} ZeroCar --title "DLNA Name" 3>&1 1>&2 2>&3)
+#var2=$(whiptail --inputbox "Name the WiFi Hotspot" ${r} ${c} ZeroCar --title "Wifi Name" 3>&1 1>&2 2>&3)
+#var3=$(whiptail --passwordbox "Please enter a password for the WiFi hotspot" ${r} ${c} --title "HotSpot Password" 3>&1 1>&2 2>&3)
+#whiptail --msgbox --title "ZeroCar automated installer" "\n\nOk all the data has been entered...The install will now complete!" ${r} ${c}
 
 ##############################################################################
 # Functions to setup the rest of the server
 ##############################################################################
 
-function update_pi() {
-#updating the distro...
-  echo ":::"
-  echo "::: Running an update to your distro"
-  $SUDO apt update
-  echo "::: DONE!"
+function instal_raspiap() {
+wget -q https://git.io/voEUQ -O /tmp/raspap && bash /tmp/raspap
 }
 
 function delete_junk() {
@@ -76,14 +73,6 @@ function delete_junk() {
   $SUDO apt-get -y purge dns-root-data minecraft-pi python-minecraftpi wolfram-engine sonic-pi libreoffice scratch
   $SUDO apt-get autoremove
   $SUDO apt-get purge
-  echo "::: DONE!"
-}
-
-function upgrade_pi() {
-#updating the distro...
-  echo ":::"
-  echo "::: Running upgrades"
-  $SUDO apt upgrade -y
   echo "::: DONE!"
 }
 
@@ -105,7 +94,7 @@ function install_the_things() {
   # installing iw so it has the tools for the autoselect script
   echo ":::"
   echo "::: Installing Samba, Minidlna, Hostapd & DNSmasq"
-  $SUDO apt install -y samba samba-common-bin minidlna hostapd dnsmasq iw 
+  $SUDO apt install -y wget samba samba-common-bin minidlna 
   echo "::: DONE installing all the things!"
 }
 
@@ -138,8 +127,8 @@ function edit_minidlna() {
   echo -n "::: Editing minidlna"
   $SUDO cp /etc/minidlna.conf /etc/minidlna.conf.bkp
   $SUDO echo 'user=minidlna
-    media_dir=~/videos/
-    db_dir=~/minidlna
+    media_dir=/home/pi/videos/
+    db_dir=/home/pi/minidlna/
     log_dir=/var/log
     port=8200
     inotify=yes
@@ -151,84 +140,8 @@ function edit_minidlna() {
     model_number=1
     root_container=B' > /etc/minidlna.conf
   echo "model_name=$var1" | sudo tee --append /etc/minidlna.conf > /dev/null
-  $SUDO mkdir ~/minidlna
+  $SUDO mkdir /home/pi/minidlna
   $SUDO update-rc.d minidlna defaults
-  echo "::: DONE!"
-}
-
-function edit_hostapd() {
-  # editing hostapd and associated properties
-  echo ":::"
-  echo "::: Editing hostapd"
-  $SUDO cp /etc/default/hostapd /etc/default/hostapd.bkp
-  echo '
-DAEMON_CONF="/etc/hostapd/hostapd.conf"' | sudo tee --append /etc/default/hostapd > /dev/null
-
-  $SUDO echo '
-# set the interface
-interface=wlan0
-
-# this is the driver that must be used for ath9k and other similar chipset devices
-driver=nl80211
-
-# add the controll interface for hostapd
-#ctrl_interface=/var/run/hostapd
-#ctrl_interface_group=0
-
-# yes, it says 802.11g, but the n-speeds get layered on top of it
-hw_mode=g
-
-
-# this enables the 802.11n speeds and capabilities ...  You will also need to enable WMM for full HT functionality.
-ieee80211n=1
-ieee80211d=1
-wmm_enabled=1
-
-# self-explanatory, but not all channels may be enabled for you - check /var/log/messages for details
-channel=6
-
-# adjust to fit your location
-country_code=US
-
-# settings for security
-auth_algs=1
-wpa=2
-wpa_key_mgmt=WPA-PSK
-wpa_pairwise=CCMP TKIP
-rsn_pairwise=CCMP
-macaddr_acl=0
-
-# these have to be set in agreement w/ channel and some other values... read hostapd.conf docs
-ht_capab=[HT20][SHORT-GI-20][DSSS_CCK-40]
-
-# makes the SSID visible and broadcasted
-ignore_broadcast_ssid=0
-' > /etc/hostapd/hostapd.conf
-  echo "ssid=$var2" | sudo tee --append /etc/hostapd/hostapd.conf > /dev/null
-  echo "wpa_passphrase=$var3" | sudo tee --append /etc/hostapd/hostapd.conf > /dev/null
-  $SUDO ln -s /etc/hostapd/hostapd.conf /home/pi/hostapd.conf
-  echo "::: DONE!"
-}
-
-function edit_dnsmasq() {
-  # editing dnsmasq so it can serve up your wifiz
-  echo ":::"
-  echo "::: Editing dnsmasq"
-  $SUDO echo '
-interface=wlan0
-domain-needed
-bogus-priv
-dhcp-range=10.0.0.10,10.0.0.150,255.255.255.0,12h' | sudo tee --append /etc/dnsmasq.conf > /dev/null
-  echo "::: DONE!"
-}
-
-function edit_dhcpdconf() {
-  # editing dhcpcd to stop it from starting the wifi network so the autostart script can
-  echo ":::"
-  echo "::: Editing dhcpd.conf"
-  $SUDO echo '
-nohook wpa_supplicant
-interface wlan0' | sudo tee --append /etc/dhcpcd.conf > /dev/null
   echo "::: DONE!"
 }
 
@@ -252,27 +165,25 @@ function install_node() {
   echo "::: DONE!"
 }
 
-function restart_Pi() {
+function finishing_touches() {
   # restarting
   echo "::: Finishing touches..."
   $SUDO chmod -R 777 /home/pi/
-  $SUDO systemctl enable hostapd
-  $SUDO systemctl enable dnsmasq
+#  $SUDO systemctl enable hostapd
+#  $SUDO systemctl enable dnsmasq
   echo ":::"
-  echo "::: please restart the Pi. ----> sudo reboot  <----"
+  echo "Hotspot IP address: 10.3.141.1"
+  echo "SSID: raspi-webgui"
+  echo "Password: ChangeMe"
 }
 
 
-update_pi
 delete_junk
-upgrade_pi
 install_the_things
 install_node
 edit_samba
 edit_minidlna
-edit_hostapd
-edit_dnsmasq
-edit_dhcpdconf
-fix_startup
 install_wifi
-restart_Pi
+instal_raspiap
+fix_startup
+finishing_touches
