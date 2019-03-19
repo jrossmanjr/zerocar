@@ -52,11 +52,11 @@ fi
 
 # Into popups and variable setup
 whiptail --msgbox --title "ZeroCar automated installer" "\nThis installer turns your Raspberry Pi and Wifi Dongle into \nan awesome WiFi router and media streamer!" ${r} ${c}
-#whiptail --msgbox --title "ZeroCar automated installer" "\n\nFirst things first... Lets set up some variables!" ${r} ${c}
-#var1=$(whiptail --inputbox "Name the DLNA Server" ${r} ${c} ZeroCar --title "DLNA Name" 3>&1 1>&2 2>&3)
-#var2=$(whiptail --inputbox "Name the WiFi Hotspot" ${r} ${c} ZeroCar --title "Wifi Name" 3>&1 1>&2 2>&3)
-#var3=$(whiptail --passwordbox "Please enter a password for the WiFi hotspot" ${r} ${c} --title "HotSpot Password" 3>&1 1>&2 2>&3)
-#whiptail --msgbox --title "ZeroCar automated installer" "\n\nOk all the data has been entered...The install will now complete!" ${r} ${c}
+whiptail --msgbox --title "ZeroCar automated installer" "\n\nFirst things first... Lets set up some variables!" ${r} ${c}
+var1=$(whiptail --inputbox "Name the DLNA Server" ${r} ${c} ZeroCar --title "DLNA Name" 3>&1 1>&2 2>&3)
+var2=$(whiptail --inputbox "Name the WiFi Hotspot" ${r} ${c} ZeroCar --title "Wifi Name" 3>&1 1>&2 2>&3)
+var3=$(whiptail --passwordbox "Please enter a password for the WiFi hotspot" ${r} ${c} --title "HotSpot Password" 3>&1 1>&2 2>&3)
+whiptail --msgbox --title "ZeroCar automated installer" "\n\nOk all the data has been entered...The install will now complete!" ${r} ${c}
 
 ##############################################################################
 # Functions to setup the rest of the server
@@ -72,7 +72,6 @@ function delete_junk() {
   echo "::: Removing JUNK...from the trunk"
   $SUDO apt-get -y purge dns-root-data minecraft-pi python-minecraftpi wolfram-engine sonic-pi libreoffice scratch
   $SUDO apt-get autoremove
-  $SUDO apt-get purge
   echo "::: DONE!"
 }
 
@@ -103,7 +102,7 @@ function edit_samba() {
   echo ":::"
   echo "::: Editing Samba... "
   echo "::: You will enter a password for your Folder Share next."
-  $SUDO smbpasswd -a $var1
+  $SUDO smbpasswd -a pi
   $SUDO cp /etc/samba/smb.conf /etc/samba/smb.conf.bkp
   $SUDO mkdir ~/videos
 
@@ -145,6 +144,54 @@ function edit_minidlna() {
   echo "::: DONE!"
 }
 
+function edit_hostapd() {
+  # editing hostapd and associated properties
+  echo ":::"
+  echo "::: Editing hostapd"
+  $SUDO echo '
+# set the interface
+interface=wlan0
+# this is the driver that must be used for ath9k and other similar chipset devices
+driver=nl80211
+# add the controll interface for hostapd
+#ctrl_interface=/var/run/hostapd
+#ctrl_interface_group=0
+# yes, it says 802.11g, but the n-speeds get layered on top of it
+hw_mode=g
+# this enables the 802.11n speeds and capabilities ...  You will also need to enable WMM for full HT functionality.
+ieee80211n=1
+wmm_enabled=1
+# self-explanatory, but not all channels may be enabled for you - check /var/log/messages for details
+channel=6
+# adjust to fit your location
+country_code=US
+# settings for security
+auth_algs=1
+wpa=2
+wpa_key_mgmt=WPA-PSK
+wpa_pairwise=CCMP
+rsn_pairwise=CCMP
+macaddr_acl=0
+# these have to be set in agreement w/ channel and some other values... read hostapd.conf docs
+#ht_capab=[HT20][SHORT-GI-20][DSSS_CCK-40]
+# makes the SSID visible and broadcasted
+ignore_broadcast_ssid=0
+' > /etc/hostapd/hostapd.conf
+  echo "ssid=$var2" | sudo tee --append /etc/hostapd/hostapd.conf > /dev/null
+  echo "wpa_passphrase=$var3" | sudo tee --append /etc/hostapd/hostapd.conf > /dev/null
+  $SUDO ln -s /etc/hostapd/hostapd.conf /home/pi/hostapd.conf
+  echo "::: DONE!"
+}
+
+function edit_dhcpdconf() {
+  # editing dhcpcd to stop it from starting the wifi network so the autostart script can
+  echo ":::"
+  echo "::: Editing dhcpd.conf"
+  $SUDO echo '
+nohook wpa_supplicant' | sudo tee --append /etc/dhcpcd.conf > /dev/null
+  echo "::: DONE!"
+}
+
 function fix_startup() {
   # move autoscript, rc.local, and make both executable 
   echo ":::"
@@ -169,12 +216,8 @@ function finishing_touches() {
   # restarting
   echo "::: Finishing touches..."
   $SUDO chmod -R 777 /home/pi/
-#  $SUDO systemctl enable hostapd
-#  $SUDO systemctl enable dnsmasq
   echo ":::"
-  echo "Hotspot IP address: 10.3.141.1"
-  echo "SSID: raspi-webgui"
-  echo "Password: ChangeMe"
+  
 }
 
 
@@ -185,5 +228,7 @@ edit_samba
 edit_minidlna
 install_wifi
 instal_raspiap
+edit_hostapd
+edit_dhcpdconf
 fix_startup
 finishing_touches
