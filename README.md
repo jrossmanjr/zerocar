@@ -57,12 +57,12 @@ I use this as a portable server for the kids' iPads while in the car or flying o
     - DLNA Server Name - so you can have a cool name in the DLNA browser of choice
     - SSID Name - Name your WiFi hotspot
     - Hotspot Password - give the hotspot a password to keep jerks out of your stuff
-    - SSID Name of Home Router - this is so when you turn it on at your house it connects to tyour home wifi for updates over ssh or to drop files in 
-    - Home Router Password
-
+    
 - Access Droppy (Droppy info: https://github.com/silverwind/droppy )
     - After the first reboot go to ``` 10.0.0.1:8989 ``` to access the Droppy interface
     - Drop in files!
+- Access to RaspAP (RaspAP info: https://github.com/billz/raspap-webgui )  
+    - After reboot go to ```10.0.0.1``` to access the RaspAP interface to change the network settings
     
 -------------------------------------------------------------------------------------------------------------------------
 Future
