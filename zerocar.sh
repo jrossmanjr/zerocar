@@ -123,8 +123,7 @@ function edit_minidlna() {
   echo ":::"
   echo -n "::: Editing minidlna"
   $SUDO cp /etc/minidlna.conf /etc/minidlna.conf.bkp
-  $SUDO echo "model_name=$var1
-  user=root
+  $SUDO echo "user=root
   media_dir=/home/pi/videos/
   db_dir=/home/pi/minidlna/
   log_dir=/var/log
@@ -137,6 +136,8 @@ function edit_minidlna() {
   serial=12345678
   model_number=1
   root_container=B" > /etc/minidlna.conf
+  echo "model_name=$var1" | sudo tee --append /etc/minidlna.conf > /dev/null
+  echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf
   $SUDO mkdir /home/pi/minidlna
   $SUDO update-rc.d minidlna defaults
   echo "::: DONE!"
@@ -232,8 +233,8 @@ function finishing_touches() {
   # restarting
   echo "::: Finishing touches..."
   $SUDO chmod -R 777 /home/pi
-  echo ":::"
-  
+  $SUDO sysctl -p
+  echo "::: PLEASE RESTART THE PI!!! :::"
 }
 
 
