@@ -104,8 +104,6 @@ function edit_samba() {
   echo "::: You will enter a password for your Folder Share next."
   $SUDO smbpasswd -a pi
   $SUDO cp /etc/samba/smb.conf /etc/samba/smb.conf.bkp
-  $SUDO mkdir ~/videos
-
   echo '[Mediadrive]
         comment = Public Storage
         path = /home/
@@ -125,20 +123,20 @@ function edit_minidlna() {
   echo ":::"
   echo -n "::: Editing minidlna"
   $SUDO cp /etc/minidlna.conf /etc/minidlna.conf.bkp
-  $SUDO echo 'user=minidlna
-    media_dir=/home/pi/videos/
-    db_dir=/home/pi/minidlna/
-    log_dir=/var/log
-    port=8200
-    inotify=yes
-    enable_tivo=no
-    strict_dlna=no
-    album_art_names=Folder.jpg/folder.jpg/Thumb.jpg/thumb.jpg/movie.tbn/movie.jpg/Poster.jpg/poster.jpg
-    notify_interval=900
-    serial=12345678
-    model_number=1
-    root_container=B' > /etc/minidlna.conf
-  echo "model_name=$var1" | sudo tee --append /etc/minidlna.conf > /dev/null
+  $SUDO echo "model_name=$var1
+  user=root
+  media_dir=/home/pi/videos/
+  db_dir=/home/pi/minidlna/
+  log_dir=/var/log
+  port=8200
+  inotify=yes
+  enable_tivo=no
+  strict_dlna=no
+  album_art_names=Folder.jpg/folder.jpg/Thumb.jpg/thumb.jpg/movie.tbn/movie.jpg/Poster.jpg/poster.jpg
+  notify_interval=900
+  serial=12345678
+  model_number=1
+  root_container=B" > /etc/minidlna.conf
   $SUDO mkdir /home/pi/minidlna
   $SUDO update-rc.d minidlna defaults
   echo "::: DONE!"
@@ -148,38 +146,31 @@ function edit_hostapd() {
   # editing hostapd and associated properties
   echo ":::"
   echo "::: Editing hostapd"
-  $SUDO echo '
-# set the interface
-interface=wlan0
-# this is the driver that must be used for ath9k and other similar chipset devices
-driver=nl80211
-# add the controll interface for hostapd
-#ctrl_interface=/var/run/hostapd
-#ctrl_interface_group=0
-# yes, it says 802.11g, but the n-speeds get layered on top of it
-hw_mode=g
-# this enables the 802.11n speeds and capabilities ...  You will also need to enable WMM for full HT functionality.
-ieee80211n=1
-wmm_enabled=1
-# self-explanatory, but not all channels may be enabled for you - check /var/log/messages for details
-channel=6
-# adjust to fit your location
-country_code=US
-# settings for security
+  $SUDO echo 'driver=nl80211
+ctrl_interface=/var/run/hostapd
+ctrl_interface_group=0
+beacon_int=100
 auth_algs=1
-wpa=2
 wpa_key_mgmt=WPA-PSK
+channel=6
+hw_mode=g
+interface=wlan0
+wpa=2
 wpa_pairwise=CCMP
 rsn_pairwise=CCMP
+country_code=US
 macaddr_acl=0
-# these have to be set in agreement w/ channel and some other values... read hostapd.conf docs
-#ht_capab=[HT20][SHORT-GI-20][DSSS_CCK-40]
-# makes the SSID visible and broadcasted
 ignore_broadcast_ssid=0
+
+## Rapberry Pi 3 specific to on board WLAN/WiFi
+ieee80211n=1
+wmm_enabled=1
+#ht_capab=[HT40][SHORT-GI-20][DSSS_CCK-40] # (Raspberry Pi 3)
+
+### SSID AND PASSWORD ###
 ' > /etc/hostapd/hostapd.conf
   echo "ssid=$var2" | sudo tee --append /etc/hostapd/hostapd.conf > /dev/null
   echo "wpa_passphrase=$var3" | sudo tee --append /etc/hostapd/hostapd.conf > /dev/null
-  $SUDO ln -s /etc/hostapd/hostapd.conf /home/pi/hostapd.conf
   echo "::: DONE!"
 }
 
@@ -187,9 +178,34 @@ function edit_dhcpdconf() {
   # editing dhcpcd to stop it from starting the wifi network so the autostart script can
   echo ":::"
   echo "::: Editing dhcpd.conf"
-  $SUDO echo '
-nohook wpa_supplicant' | sudo tee --append /etc/dhcpcd.conf > /dev/null
+  $SUDO echo '#Defaults from Raspberry Pi configuration
+hostname
+clientid
+persistent
+option rapid_commit
+option domain_name_servers, domain_name, domain_search, host_name
+option classless_static_routes
+option ntp_servers
+require dhcp_server_identifier
+slaac private
+nohook lookup-hostname
+nohook wpa_supplicant
+
+interface wlan0
+static ip_address=10.0.0.1/24
+static routers=10.0.0.1
+static domain_name_server=1.1.1.1 8.8.8.8' > /etc/dhcpcd.conf
   echo "::: DONE!"
+}
+
+function edit_dnsmasq() {
+  # editing dnsmasq
+  echo ":::"
+  echo "::: Editing dnsmasq.conf"
+  echo "domain-needed
+interface=wlan0
+dhcp-range=10.0.0.2,10.0.0.245,255.255.255.0,24h" > /etc/dnsmasq.conf
+  echo "::: DONE"
 }
 
 function fix_startup() {
@@ -215,7 +231,7 @@ function install_node() {
 function finishing_touches() {
   # restarting
   echo "::: Finishing touches..."
-  $SUDO chmod -R 777 /home/pi/
+  $SUDO chmod -R 777 /home/pi
   echo ":::"
   
 }
@@ -230,5 +246,6 @@ install_wifi
 instal_raspiap
 edit_hostapd
 edit_dhcpdconf
+edit_dnsmasq
 fix_startup
 finishing_touches
