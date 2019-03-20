@@ -88,9 +88,6 @@ function install_wifi() {
 function install_the_things() {
   # installing samba server so you can connect and add files easily
   # installing minidlna to serve up your shit nicely
-  # installing hostapd so it makes the wifi adaper into an access point
-  # installing dnsmasq so it can serve up your wifiz
-  # installing iw so it has the tools for the autoselect script
   echo ":::"
   echo "::: Installing Samba, Minidlna, Hostapd & DNSmasq"
   $SUDO apt install -y wget samba samba-common-bin minidlna 
