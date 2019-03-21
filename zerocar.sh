@@ -2,15 +2,32 @@
 # ZeroCar Install Script
 # by jrossmanjr -- https://github.com/jrossmnajr/zerocar
 # Use a RaspberryPi as a WiFi hotspot to serve up files
+#--------------------------------------------------------------------------------------------------------------------#
+# Shoutout to the folks making PiHole, Adafruit, & PIRATEBOX for showing me the way and essentially teaching me BASH 
 
-# Shoutout to the folks making PiHole, Adafruit, & PIRATEBOX for showing me the way and essentially teaching me to code for the Pi...
 # Thanks to MrEngman for making the wifi installer!! more info: https://www.raspberrypi.org/forums/viewtopic.php?p=462982
-# A lot of help came from ADAFRUIT: https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/install-software
-# Thanks to SDESALAS who made a schweet node install script: https://github.com/sdesalas/node-pi-zero
-# Huge thanks to silverwind who made Droppy...makes managing the files much easier thru the web : https://github.com/silverwind/droppy
-# Thanks to RaspberryConnect.com for some refinement of the setup code
-# RaspiAP by billz is the shit -- https://github.com/billz/raspap-webgui
+# A lot of help came from ADAFRUIT: 
+# https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/install-software
 
+# Thanks to SDESALAS who made a schweet node install script: https://github.com/sdesalas/node-pi-zero
+
+# Huge thanks to silverwind who made Droppy...makes managing the files much easier thru the web: 
+# https://github.com/silverwind/droppy
+
+# Thanks to RaspberryConnect.com for some refinement of the setup code
+
+# RaspiAP by billz is the shit -- https://github.com/billz/raspap-webgui
+#--------------------------------------------------------------------------------------------------------------------#
+# MIT License 
+#Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
+#documentation files (the "Software"), to deal in the Software without restriction, including without limitation 
+#the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, 
+#and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+#THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
+#THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS 
+#OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR 
+#OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#--------------------------------------------------------------------------------------------------------------------#
 echo ":::
 ███████╗███████╗██████╗  ██████╗  ██████╗ █████╗ ██████╗
 ╚══███╔╝██╔════╝██╔══██╗██╔═══██╗██╔════╝██╔══██╗██╔══██╗
@@ -58,9 +75,9 @@ var2=$(whiptail --inputbox "Name the WiFi Hotspot" ${r} ${c} ZeroCar --title "Wi
 var3=$(whiptail --passwordbox "Please enter a password for the WiFi hotspot" ${r} ${c} --title "HotSpot Password" 3>&1 1>&2 2>&3)
 whiptail --msgbox --title "ZeroCar automated installer" "\n\nOk all the data has been entered...The install will now complete!" ${r} ${c}
 
-##############################################################################
+#--------------------------------------------------------------------------------------------------------------------#
 # Functions to setup the rest of the server
-##############################################################################
+#--------------------------------------------------------------------------------------------------------------------#
 
 function instal_raspiap() {
 wget -q https://git.io/voEUQ -O /tmp/raspap && bash /tmp/raspap
