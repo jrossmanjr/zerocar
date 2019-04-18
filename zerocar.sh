@@ -3,29 +3,29 @@
 # by jrossmanjr -- https://github.com/jrossmnajr/zerocar
 # Use a RaspberryPi as a WiFi hotspot to serve up files
 #--------------------------------------------------------------------------------------------------------------------#
-# Shoutout to the folks making PiHole, Adafruit, & PIRATEBOX for showing me the way and essentially teaching me BASH 
+# Shoutout to the folks making PiHole, Adafruit, & PIRATEBOX for showing me the way and essentially teaching me BASH
 
 # Thanks to MrEngman for making the wifi installer!! more info: https://www.raspberrypi.org/forums/viewtopic.php?p=462982
-# A lot of help came from ADAFRUIT: 
+# A lot of help came from ADAFRUIT:
 # https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/install-software
 
 # Thanks to SDESALAS who made a schweet node install script: https://github.com/sdesalas/node-pi-zero
 
-# Huge thanks to silverwind who made Droppy...makes managing the files much easier thru the web: 
+# Huge thanks to silverwind who made Droppy...makes managing the files much easier thru the web:
 # https://github.com/silverwind/droppy
 
 # Thanks to RaspberryConnect.com for some refinement of the setup code
 
 # RaspiAP by billz is the shit -- https://github.com/billz/raspap-webgui
 #--------------------------------------------------------------------------------------------------------------------#
-# MIT License 
-#Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
-#documentation files (the "Software"), to deal in the Software without restriction, including without limitation 
-#the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, 
+# MIT License
+#Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+#documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+#the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
 #and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-#THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-#THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS 
-#OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR 
+#THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+#THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
+#OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 #OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #--------------------------------------------------------------------------------------------------------------------#
 echo ":::
@@ -107,7 +107,7 @@ function install_the_things() {
   # installing minidlna to serve up your shit nicely
   echo ":::"
   echo "::: Installing Samba, Minidlna, Hostapd & DNSmasq"
-  $SUDO apt install -y wget samba samba-common-bin minidlna 
+  $SUDO apt install -y wget samba samba-common-bin minidlna
   echo "::: DONE installing all the things!"
 }
 
@@ -177,7 +177,7 @@ country_code=US
 macaddr_acl=0
 ignore_broadcast_ssid=0
 
-## Rapberry Pi 3 specific to on board WLAN/WiFi
+### Rapberry Pi 3 specific to on board WLAN/WiFi ###
 ieee80211n=1
 wmm_enabled=1
 #ht_capab=[HT40][SHORT-GI-20][DSSS_CCK-40] # (Raspberry Pi 3)
@@ -224,7 +224,7 @@ dhcp-range=10.0.0.2,10.0.0.245,255.255.255.0,24h" > /etc/dnsmasq.conf
 }
 
 function fix_startup() {
-  # move autoscript, rc.local, and make both executable 
+  # move autoscript, rc.local, and make both executable
   echo ":::"
   echo "::: Moving scripts for startup"
   $SUDO cp rc.local /etc/rc.local
