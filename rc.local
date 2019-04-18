@@ -11,15 +11,19 @@
 #
 # By default this script does nothing.
 
-#restart the wifi adapter
-#ifdown wlan0; ifup wlan0
-
 # Print the IP address
 _IP=$(hostname -I) || true
 if [ "$_IP" ]; then
   printf "My IP address is %s\n" "$_IP"
 fi
 
+# starts droppy on port :8989
 sudo /opt/nodejs/lib/node_modules/droppy/droppy.js start -f /home/ &
+
+# this removes the minidlna database file, restarts minidlna and rebuilds the file to account for new movies
+# yes I know this is heavy handed but it works for now.
+#sudo rm -R /home/pi/minidlna/Files.db
+#sudo service minidlna restart
+#sudo minidlnad -R
 
 exit 0
