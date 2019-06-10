@@ -139,7 +139,7 @@ function edit_minidlna() {
   $SUDO cp /etc/minidlna.conf /etc/minidlna.conf.bkp
   $SUDO echo "user=root
   media_dir=/home/pi/videos/
-  db_dir=/home/pi/minidlna/
+  db_dir=/home/pi/videos/minidlna/
   log_dir=/var/log
   port=8200
   inotify=yes
@@ -249,8 +249,9 @@ function finishing_touches() {
   $SUDO chmod -R 777 /home/pi
   $SUDO sysctl -p
   #echo "::: PLEASE RESTART THE PI!!! :::"
-  $SUDO reboot
   echo "~~~~~REBOOTING!~~~~~"
+  $SUDO reboot
+
 }
 
 
@@ -259,7 +260,7 @@ install_the_things
 install_node
 edit_samba
 edit_minidlna
-install_wifi
+#install_wifi
 instal_raspiap
 edit_hostapd
 edit_dhcpdconf
