@@ -136,6 +136,7 @@ function edit_minidlna() {
   # editing minidlna
   echo ":::"
   echo -n "::: Editing minidlna"
+  $SUDO mkdir /home/pi/videos/minidlna
   $SUDO cp /etc/minidlna.conf /etc/minidlna.conf.bkp
   $SUDO echo "user=root
   media_dir=/home/pi/videos/
@@ -152,7 +153,6 @@ function edit_minidlna() {
   root_container=B" > /etc/minidlna.conf
   echo "model_name=$var1" | sudo tee --append /etc/minidlna.conf > /dev/null
   echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf
-  $SUDO mkdir /home/pi/minidlna
   $SUDO update-rc.d minidlna defaults
   echo "::: DONE!"
 }
