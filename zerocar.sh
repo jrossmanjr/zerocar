@@ -80,7 +80,12 @@ whiptail --msgbox --title "ZeroCar automated installer" "\n\nOk all the data has
 #--------------------------------------------------------------------------------------------------------------------#
 
 function instal_raspiap() {
-wget -q https://git.io/voEUQ -O /tmp/raspap && bash /tmp/raspap
+  echo ":::"
+  echo "::: Installing Access Pont Software..."
+  echo "************************"
+  echo "*** DO NOT RESTART!! ***"
+  echo "************************"
+  wget -q https://git.io/voEUQ -O /tmp/raspap && bash /tmp/raspap
 }
 
 function delete_junk() {
