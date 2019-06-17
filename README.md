@@ -1,14 +1,14 @@
 # ZeroCar
 Used to deploy a RaspberryPi DLNA server via a hotspot
 
-I use this as a portable server for the kids' iPads while in the car or flying on trips. 
-    
+I use this as a portable server for the kids' iPads while in the car or flying on trips.
+
 - Raspberry Pi Setup:
-    - This was built for the Raspberry Pi Zero W 
-            
+    - This was built for the Raspberry Pi Zero W
+
     - "Burn" the Raspbian image of your choice to the SD card with another computer
         - Try Etcher by resin.io -- https://www.balena.io/etcher/
-    
+
     - To allow for SSH access: https://bit.ly/2VUi53V
         - You can add a file to the boot partition called "ssh"
        ```
@@ -31,16 +31,16 @@ I use this as a portable server for the kids' iPads while in the car or flying o
             auth_alg=OPEN
         }
         ```
-        - Save the config file in the boot partition 
+        - Save the config file in the boot partition
 
     - Install the SD card to the RPi and boot
-    
+
     - SSH into the RPi through Putty or Terminal of choice https://bit.ly/2UzWyNA
 
     - Log in and run -- `sudo raspi-config`
         - Setup the keyboard in internationalization tools so it's configured correctly
-    
-    - Run -- 
+
+    - Run --
         ```
         sudo apt update
         sudo apt upgrade
@@ -50,20 +50,21 @@ I use this as a portable server for the kids' iPads while in the car or flying o
         chmod +x zerocar.sh
         sudo ./zerocar.sh
         ```
-        - Fill in data for the prompts!
-      
+        - Fill in data for the prompts
+        - DO NOT RESTART AT ANY PROMPTS!
+
 - The installer will prompt you for:
-    - SMB Password - so you can connect thru SMB to drop files in 
+    - SMB Password - so you can connect thru SMB to drop files in
     - DLNA Server Name - so you can have a cool name in the DLNA browser of choice
     - SSID Name - Name your WiFi hotspot
-    - Hotspot Password - give the hotspot a password to keep jerks out of your stuff
+    - Hotspot Password - give the hotspot a password to keep freeloaders out of your stuff
     
 - Access Droppy (Droppy info: https://github.com/silverwind/droppy )
     - After the first reboot go to ``` 10.0.0.1:8989 ``` to access the Droppy interface
     - Drop in files!
 - Access to RaspAP (RaspAP info: https://github.com/billz/raspap-webgui )  
     - After reboot go to ```10.0.0.1``` to access the RaspAP interface to change the network settings
-    
+
 -------------------------------------------------------------------------------------------------------------------------
 Future
 - want to harden the OS to make it mostly read only -- to help with SD card corruption
@@ -71,5 +72,3 @@ Future
 
 
 -------------------------------------------------------------------------------------------------------------------------
-
-
