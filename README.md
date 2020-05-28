@@ -14,7 +14,7 @@ I use this as a portable server for the kids' iPads while in the car or flying o
        ```
        touch ssh
        ```
-        - OR...Create a blank txt file and save it to the boot partition as ssh.txt
+        - OR...Create a blank txt file and save it to the boot partition as ssh
 
     - have the RPi auto connect to you home router on boot so you can ssh in
         - Create a file in your text editor of choice called "wpa_supplicant.conf" with the below in the file
