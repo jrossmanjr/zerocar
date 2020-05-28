@@ -265,7 +265,7 @@ install_the_things
 install_node
 edit_samba
 edit_minidlna
-#install_wifi
+install_wifi
 instal_raspiap
 edit_hostapd
 edit_dhcpdconf
