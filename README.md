@@ -58,7 +58,7 @@ I use this as a portable server for the kids' iPads while in the car or flying o
     - DLNA Server Name - so you can have a cool name in the DLNA browser of choice
     - SSID Name - Name your WiFi hotspot
     - Hotspot Password - give the hotspot a password to keep freeloaders out of your stuff
-    
+
 - Access Droppy (Droppy info: https://github.com/silverwind/droppy )
     - After the first reboot go to ``` 10.0.0.1:8989 ``` to access the Droppy interface
     - Drop in files!
