@@ -61,11 +61,11 @@ whiptail --msgbox --title "ZeroCar automated installer" "\n\nFirst things first.
 var2=$(whiptail --inputbox "Name the WiFi Hotspot" ${r} ${c} ZeroCar --title "Wifi Name" 3>&1 1>&2 2>&3)
 var3=$(whiptail --passwordbox "Please enter a password for the WiFi hotspot" ${r} ${c} --title "HotSpot Password" 3>&1 1>&2 2>&3)
 whiptail --msgbox --title "ZeroCar automated installer" "\n\nOk all the data has been entered...The install will now complete!" ${r} ${c}
-mkdir media
-cd media
-mkdir config
-mkdir tv
-mkdir movies
+#mkdir media
+#cd media
+#mkdir config
+#mkdir tv
+#mkdir movies
 #--------------------------------------------------------------------------------------------------------------------#
 # Functions to setup the rest of the server
 #--------------------------------------------------------------------------------------------------------------------#
@@ -125,7 +125,7 @@ ignore_broadcast_ssid=0
 }
 
 function edit_dhcpdconf() {
-  # editing dhcpcd to stop it from starting the wifi network so the autostart script can
+  # editing dhcpcd
   echo ":::"
   echo "::: Editing dhcpd.conf"
   $SUDO echo '#Defaults from Raspberry Pi configuration
@@ -158,7 +158,7 @@ dhcp-range=10.0.0.2,10.0.0.245,255.255.255.0,24h" > /etc/dnsmasq.conf
 }
 
 function install_docker() {
-  # update Node.js, NPM and install Droppy to allow for web file serving
+  # install Docker and Jellyfin
   echo ":::"
   echo "::: Installing Docker"
   curl -sSL https://get.docker.com | sh
