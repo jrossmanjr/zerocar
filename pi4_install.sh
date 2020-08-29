@@ -211,6 +211,8 @@ function install_docker() {
   docker volume create portainer_data
   docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
   echo "::: Installing Jellyfin"
+  mkdir media
+  cd media
   mkdir config
   mkdir tv
   mkdir movies
@@ -221,9 +223,9 @@ function install_docker() {
     -e TZ=America/New_York \
     -e UMASK_SET=022 \
     -p 8096:8096 \
-    -v /home/pi/config:/config \
-    -v /home/pi/tv:/data/tvshows \
-    -v /home/pi/movies:/data/movies \
+    -v /home/pi/media/config:/config \
+    -v /home/pi/media/tv:/data/tvshows \
+    -v /home/pi/media/movies:/data/movies \
     -v /opt/vc/lib:/opt/vc/lib \
     --device /dev/vcsm:/dev/vcsm \
     --device /dev/vchiq:/dev/vchiq \
