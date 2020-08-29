@@ -70,14 +70,6 @@ whiptail --msgbox --title "ZeroCar automated installer" "\n\nOk all the data has
 # Functions to setup the rest of the server
 #--------------------------------------------------------------------------------------------------------------------#
 
-function instal_raspiap() {
-  echo ":::"
-  echo "::: Installing Access Pont Software..."
-  echo "************************"
-  echo "*** DO NOT RESTART!  ***"
-  echo "************************"
-  wget -q https://git.io/voEUQ -O /tmp/raspap && bash /tmp/raspap
-}
 
 function delete_junk() {
 # delete all the junk that has nothing to do with being a lightweight server if your using the full install not lite
@@ -95,6 +87,49 @@ function install_the_things() {
   $SUDO apt upgrade -y
   $SUDO apt install -y wget git
   echo "::: DONE installing all the things!"
+}
+
+function install_docker() {
+  # install Docker and Jellyfin
+  echo ":::"
+  echo "::: Installing Docker"
+  curl -sSL https://get.docker.com | sh
+  $SUDO usermod -aG docker pi
+  echo "::: Installing Portainer"
+  docker volume create portainer_data
+  docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
+  echo "::: Installing Jellyfin"
+  docker create \
+    --name=jellyfin \
+    -e PUID=1000 \
+    -e PGID=1000 \
+    -e TZ=America/New_York \
+    -e UMASK_SET=022 \
+    -p 8096:8096 \
+    -v /home/pi/media/config:/config \
+    -v /home/pi/media/tv:/data/tvshows \
+    -v /home/pi/media/movies:/data/movies \
+    -v /opt/vc/lib:/opt/vc/lib \
+    --device /dev/vcsm:/dev/vcsm \
+    --device /dev/vchiq:/dev/vchiq \
+    --device /dev/video10:/dev/video10 \
+    --device /dev/video11:/dev/video11 \
+    --device /dev/video12:/dev/video12 \
+    --restart unless-stopped \
+    linuxserver/jellyfin
+
+  echo ":::"
+  echo "::: DONE!"
+}
+
+function instal_raspiap() {
+  echo ":::"
+  echo "::: Installing Access Pont Software..."
+  echo "************************"
+  echo "*** DO NOT RESTART!  ***"
+  echo "************************"
+  whiptail --msgbox --title "Installing Access Pont Software" "\n ************************ \n *** DO NOT RESTART!  *** \n  ************************ " ${r} ${c}
+  wget -q https://git.io/voEUQ -O /tmp/raspap && bash /tmp/raspap
 }
 
 function edit_hostapd() {
@@ -157,39 +192,6 @@ function edit_dnsmasq() {
 interface=wlan0
 dhcp-range=10.0.0.2,10.0.0.245,255.255.255.0,24h" > /etc/dnsmasq.conf
   echo "::: DONE"
-}
-
-function install_docker() {
-  # install Docker and Jellyfin
-  echo ":::"
-  echo "::: Installing Docker"
-  curl -sSL https://get.docker.com | sh
-  $SUDO usermod -aG docker pi
-  echo "::: Installing Portainer"
-  docker volume create portainer_data
-  docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
-  echo "::: Installing Jellyfin"
-  docker create \
-    --name=jellyfin \
-    -e PUID=1000 \
-    -e PGID=1000 \
-    -e TZ=America/New_York \
-    -e UMASK_SET=022 \
-    -p 8096:8096 \
-    -v /home/pi/media/config:/config \
-    -v /home/pi/media/tv:/data/tvshows \
-    -v /home/pi/media/movies:/data/movies \
-    -v /opt/vc/lib:/opt/vc/lib \
-    --device /dev/vcsm:/dev/vcsm \
-    --device /dev/vchiq:/dev/vchiq \
-    --device /dev/video10:/dev/video10 \
-    --device /dev/video11:/dev/video11 \
-    --device /dev/video12:/dev/video12 \
-    --restart unless-stopped \
-    linuxserver/jellyfin
-
-  echo ":::"
-  echo "::: DONE!"
 }
 
 function finishing_touches() {
