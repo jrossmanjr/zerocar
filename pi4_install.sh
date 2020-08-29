@@ -90,7 +90,9 @@ function delete_junk() {
 
 function install_the_things() {
   echo ":::"
-  echo "::: Installing necessary files"
+  echo "::: Updating and installing necessary files"
+  $SUDO apt update
+  $SUDO apt upgrade -y
   $SUDO apt install -y wget git
   echo "::: DONE installing all the things!"
 }
@@ -162,7 +164,7 @@ function install_docker() {
   echo ":::"
   echo "::: Installing Docker"
   curl -sSL https://get.docker.com | sh
-  $SUDO usermod -aG docker Pi
+  $SUDO usermod -aG docker pi
   echo "::: Installing Portainer"
   docker volume create portainer_data
   docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
@@ -197,6 +199,8 @@ function finishing_touches() {
   $SUDO sysctl -p
   var4=$(ip route get 1 | awk '{print $NF;exit}')
   echo "::: To setup Portainer --- Access at $var4:9000"
+  echo "::: "
+  echo "::: To setup Jellyfin --- Access at $var4:8096"
   echo "::: "
   echo "::: PLEASE RESTART THE PI! :::"
 }
