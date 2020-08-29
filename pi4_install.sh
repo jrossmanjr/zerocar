@@ -244,10 +244,7 @@ function finishing_touches() {
   echo "::: Finishing touches..."
   $SUDO chmod -R 777 /home/pi
   $SUDO sysctl -p
-  #echo "::: PLEASE RESTART THE PI!!! :::"
-  echo "~~~~~REBOOTING!~~~~~"
-  $SUDO reboot
-
+  echo "::: PLEASE RESTART THE PI!!! :::"
 }
 
 
