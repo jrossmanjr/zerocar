@@ -2,21 +2,11 @@
 # ZeroCar Install Script
 # by jrossmanjr -- https://github.com/jrossmnajr/zerocar
 # Use a RaspberryPi as a WiFi hotspot to serve up files
-#--------------------------------------------------------------------------------------------------------------------#
+#---------------------------------------------------Thanks Developers------------------------------------------------#
 # Shoutout to the folks making PiHole, Adafruit, & PIRATEBOX for showing me the way and essentially teaching me BASH
-
-# Thanks to MrEngman for making the wifi installer!! more info: https://www.raspberrypi.org/forums/viewtopic.php?p=462982
-# A lot of help came from ADAFRUIT:
-# https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/install-software
-
-# Thanks to SDESALAS who made a schweet node install script: https://github.com/sdesalas/node-pi-zero
-
-# Huge thanks to silverwind who made Droppy...makes managing the files much easier thru the web:
-# https://github.com/silverwind/droppy
-
+# A lot of help came from ADAFRUIT: https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/install-software
 # Thanks to RaspberryConnect.com for some refinement of the setup code
-
-# RaspiAP by billz is the shit -- https://github.com/billz/raspap-webgui
+# RaspiAP by billz is awesome and make management easier -- https://github.com/billz/raspap-webgui
 #--------------------------------------------------------------------------------------------------------------------#
 # MIT License
 #Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
@@ -37,7 +27,7 @@ echo ":::
 ╚══════╝╚══════╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝
     By - jrossmanjr   //   https://github.com/jrossmnajr/zerocar             "
 
-# Find the rows and columns will default to 80x24 is it can not be detected
+# Find the rows and columns will default to 80x24 if it can not be detected
 screen_size=$(stty size 2>/dev/null || echo 24 80)
 rows=$(echo $screen_size | awk '{print $1}')
 columns=$(echo $screen_size | awk '{print $2}')
@@ -65,14 +55,17 @@ else
   fi
 fi
 
-# Into popups and variable setup
-whiptail --msgbox --title "ZeroCar automated installer" "\nThis installer turns your Raspberry Pi and Wifi Dongle into \nan awesome WiFi router and media streamer!" ${r} ${c}
+# Into popups, variable setup, and directory creation
+whiptail --msgbox --title "ZeroCar automated installer" "\nThis installer turns your Raspberry Pi into \nan awesome WiFi router and media streamer!" ${r} ${c}
 whiptail --msgbox --title "ZeroCar automated installer" "\n\nFirst things first... Lets set up some variables!" ${r} ${c}
-var1=$(whiptail --inputbox "Name the DLNA Server" ${r} ${c} ZeroCar --title "DLNA Name" 3>&1 1>&2 2>&3)
 var2=$(whiptail --inputbox "Name the WiFi Hotspot" ${r} ${c} ZeroCar --title "Wifi Name" 3>&1 1>&2 2>&3)
 var3=$(whiptail --passwordbox "Please enter a password for the WiFi hotspot" ${r} ${c} --title "HotSpot Password" 3>&1 1>&2 2>&3)
 whiptail --msgbox --title "ZeroCar automated installer" "\n\nOk all the data has been entered...The install will now complete!" ${r} ${c}
-
+mkdir media
+cd media
+mkdir config
+mkdir tv
+mkdir movies
 #--------------------------------------------------------------------------------------------------------------------#
 # Functions to setup the rest of the server
 #--------------------------------------------------------------------------------------------------------------------#
@@ -87,7 +80,7 @@ function instal_raspiap() {
 }
 
 function delete_junk() {
-# delete all the junk that has nothing to do with being a lightweight server
+# delete all the junk that has nothing to do with being a lightweight server if your using the full install not lite
   echo ":::"
   echo "::: Removing JUNK...from the trunk"
   $SUDO apt-get -y purge dns-root-data minecraft-pi python-minecraftpi wolfram-engine sonic-pi libreoffice scratch
@@ -95,48 +88,11 @@ function delete_junk() {
   echo "::: DONE!"
 }
 
-function install_wifi() {
-# installing wifi drivers for rtl8188eu chipset
-  echo ":::"
-  echo "::: Installing wifi drivers"
-  $SUDO wget http://downloads.fars-robotics.net/wifi-drivers/install-wifi -O /usr/bin/install-wifi
-  $SUDO chmod +x /usr/bin/install-wifi
-  $SUDO install-wifi
-  echo "::: DONE!"
-}
-
 function install_the_things() {
-  # installing samba server so you can connect and add files easily
-  # installing minidlna to serve up your shit nicely
   echo ":::"
-  echo "::: Installing Samba, Minidlna, Hostapd & DNSmasq"
-  $SUDO apt install -y wget samba samba-common-bin minidlna
+  echo "::: Installing necessary files"
+  $SUDO apt install -y wget git
   echo "::: DONE installing all the things!"
-}
-
-function edit_minidlna() {
-  # editing minidlna
-  echo ":::"
-  echo -n "::: Editing minidlna"
-  $SUDO mkdir /home/pi/minidlna
-  $SUDO cp /etc/minidlna.conf /etc/minidlna.conf.bkp
-  $SUDO echo "user=root
-  media_dir=/home/pi/
-  db_dir=/home/pi/minidlna/
-  log_dir=/var/log
-  port=8200
-  inotify=yes
-  enable_tivo=no
-  strict_dlna=no
-  album_art_names=Folder.jpg/folder.jpg/Thumb.jpg/thumb.jpg/movie.tbn/movie.jpg/Poster.jpg/poster.jpg
-  notify_interval=900
-  serial=12345678
-  model_number=1
-  root_container=B" > /etc/minidlna.conf
-  echo "model_name=$var1" | sudo tee --append /etc/minidlna.conf > /dev/null
-  echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf
-  $SUDO update-rc.d minidlna defaults
-  echo "::: DONE!"
 }
 
 function edit_hostapd() {
@@ -207,15 +163,10 @@ function install_docker() {
   echo "::: Installing Docker"
   curl -sSL https://get.docker.com | sh
   $SUDO usermod -aG docker Pi
-  echo "::: Installing Portainer --- Access at 10.0.0.1:9000"
+  echo "::: Installing Portainer"
   docker volume create portainer_data
   docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
   echo "::: Installing Jellyfin"
-  mkdir media
-  cd media
-  mkdir config
-  mkdir tv
-  mkdir movies
   docker create \
     --name=jellyfin \
     -e PUID=1000 \
@@ -244,7 +195,10 @@ function finishing_touches() {
   echo "::: Finishing touches..."
   $SUDO chmod -R 777 /home/pi
   $SUDO sysctl -p
-  echo "::: PLEASE RESTART THE PI!!! :::"
+  var4=$(ip route get 1 | awk '{print $NF;exit}')
+  echo "::: To setup Portainer --- Access at $var4:9000"
+  echo "::: "
+  echo "::: PLEASE RESTART THE PI! :::"
 }
 
 
@@ -252,8 +206,6 @@ delete_junk
 install_the_things
 install_docker
 instal_raspiap
-edit_minidlna
-install_wifi
 edit_hostapd
 edit_dhcpdconf
 edit_dnsmasq
