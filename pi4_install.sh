@@ -185,7 +185,7 @@ function finishing_touches() {
 
 delete_junk
 install_the_things
-install_docker
+install_jellyfin
 instal_raspiap
 edit_hostapd
 edit_dhcpdconf
