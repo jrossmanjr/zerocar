@@ -7,6 +7,7 @@
 # A lot of help came from ADAFRUIT: https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/install-software
 # Thanks to RaspberryConnect.com for some refinement of the setup code
 # RaspiAP by billz is awesome and make management easier -- https://github.com/billz/raspap-webgui
+# thanks to Moe Long for a Jellyfin tutorial -- https://www.electromaker.io/tutorial/blog/how-to-install-jellyfin-on-the-raspberry-pi
 #--------------------------------------------------------------------------------------------------------------------#
 # MIT License
 #Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
