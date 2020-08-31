@@ -89,35 +89,14 @@ function install_the_things() {
   echo "::: DONE installing all the things!"
 }
 
-function install_docker() {
-  # install Docker and Jellyfin
+function install_jellyfin() {
+  # install Jellyfin
   echo ":::"
-  echo "::: Installing Docker"
-  curl -sSL https://get.docker.com | sh
-  $SUDO usermod -aG docker pi
-  echo "::: Installing Portainer"
-  docker volume create portainer_data
-  docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
   echo "::: Installing Jellyfin"
-  docker create \
-    --name=jellyfin \
-    -e PUID=1000 \
-    -e PGID=1000 \
-    -e TZ=America/New_York \
-    -e UMASK_SET=022 \
-    -p 8096:8096 \
-    -v /home/pi/media/config:/config \
-    -v /home/pi/media/tv:/data/tvshows \
-    -v /home/pi/media/movies:/data/movies \
-    -v /opt/vc/lib:/opt/vc/lib \
-    --device /dev/vcsm:/dev/vcsm \
-    --device /dev/vchiq:/dev/vchiq \
-    --device /dev/video10:/dev/video10 \
-    --device /dev/video11:/dev/video11 \
-    --device /dev/video12:/dev/video12 \
-    --restart unless-stopped \
-    linuxserver/jellyfin
-
+  echo "deb [arch=armhf] https://repo.jellyfin.org/debian $( lsb_release -c -s ) main" | sudo tee /etc/apt/sources.list.d/jellyfin.list
+  $SUDO apt update
+  $SUDO apt install jellyfin
+  $SUDO usermod -aG video jellyfin sudo systemctl restart jellyfin
   echo ":::"
   echo "::: DONE!"
 }
@@ -125,10 +104,7 @@ function install_docker() {
 function instal_raspiap() {
   echo ":::"
   echo "::: Installing Access Pont Software..."
-  echo "************************"
-  echo "*** DO NOT RESTART!  ***"
-  echo "************************"
-  whiptail --msgbox --title "Installing Access Pont Software" "\n ************************ \n *** DO NOT RESTART!  *** \n  ************************ " ${r} ${c}
+  whiptail --msgbox --title "Installing Access Pont Software" "\n ********************************* \n *** DO NOT RESTART WHEN RaspiAP FINISHES!  *** \n  ********************************* " ${r} ${c}
   wget -q https://git.io/voEUQ -O /tmp/raspap && bash /tmp/raspap
 }
 
@@ -199,9 +175,7 @@ function finishing_touches() {
   echo "::: Finishing touches..."
   $SUDO chmod -R 777 /home/pi
   $SUDO sysctl -p
-  var4=$(ip route get 1 | awk '{print $NF;exit}')
-  echo "::: To setup Portainer --- Access at $var4:9000"
-  echo "::: "
+  var4=$(hostname -I)
   echo "::: To setup Jellyfin --- Access at $var4:8096"
   echo "::: "
   echo "::: PLEASE RESTART THE PI! :::"
