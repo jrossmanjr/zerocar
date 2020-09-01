@@ -116,23 +116,31 @@ function edit_hostapd() {
   $SUDO echo 'driver=nl80211
 ctrl_interface=/var/run/hostapd
 ctrl_interface_group=0
-interface=wlan0       # the interface used by the AP
-hw_mode=a             # a simply means 5GHz
-channel=0             # the channel to use, 0 means the AP will search for the channel with the least interferences
-ieee80211d=1          # limit the frequencies used to those allowed in the country
-country_code=US       # the country code
-ieee80211n=1          # 802.11n support
-ieee80211ac=1         # 802.11ac support
-wmm_enabled=1         # QoS support
-auth_algs=1           # 1=wpa, 2=wep, 3=both
-wpa=2                 # WPA2 only
+auth_algs=1
 wpa_key_mgmt=WPA-PSK
-rsn_pairwise=CCMP
+beacon_int=100
+channel=36
+hw_mode=a
+
+# N
+ieee80211n=1
+require_ht=1
+ht_capab=[MAX-AMSDU-3839][HT40+][SHORT-GI-20][SHORT-GI-40][DSSS_CCK-40]
+
+# AC
+ieee80211ac=1
+require_vht=1
+ieee80211d=0
+ieee80211h=0
+vht_capab=[MAX-AMSDU-3839][SHORT-GI-80]
+vht_oper_chwidth=1
+vht_oper_centr_freq_seg0_idx=42
+
+interface=wlan0
+wpa=2
 wpa_pairwise=CCMP
-macaddr_acl=0
-ignore_broadcast_ssid=0
-### SSID AND PASSWORD ###
-' > /etc/hostapd/hostapd.conf
+country_code=US
+ignore_broadcast_ssid=0' > /etc/hostapd/hostapd.conf
   echo "ssid=$var2" | sudo tee --append /etc/hostapd/hostapd.conf > /dev/null
   echo "wpa_passphrase=$var3" | sudo tee --append /etc/hostapd/hostapd.conf > /dev/null
   echo "::: DONE!"
@@ -142,7 +150,7 @@ function edit_dhcpdconf() {
   # editing dhcpcd
   echo ":::"
   echo "::: Editing dhcpd.conf"
-  $SUDO echo '#Defaults from Raspberry Pi configuration
+  $SUDO echo '# RaspAP wlan0 configuration
 hostname
 clientid
 persistent
@@ -153,10 +161,8 @@ option ntp_servers
 require dhcp_server_identifier
 slaac private
 nohook lookup-hostname
-nohook wpa_supplicant
 interface wlan0
 static ip_address=10.0.0.1/24
-static routers=10.0.0.1
 static domain_name_server=1.1.1.1 8.8.8.8' > /etc/dhcpcd.conf
   echo "::: DONE!"
 }
