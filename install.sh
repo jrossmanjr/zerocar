@@ -94,7 +94,8 @@ function install_jellyfin() {
   # install Jellyfin
   echo ":::"
   echo "::: Installing Jellyfin"
-  echo "deb [arch=armhf] https://repo.jellyfin.org/debian $( lsb_release -c -s ) main" | sudo tee /etc/apt/sources.list.d/jellyfin.list
+  $SUDO add-apt-repository universe
+  echo "deb [arch=$( dpkg --print-architecture )] https://repo.jellyfin.org/ubuntu $( lsb_release -c -s ) main" | sudo tee /etc/apt/sources.list.d/jellyfin.list
   wget -O - https://repo.jellyfin.org/debian/jellyfin_team.gpg.key | sudo apt-key add -
   $SUDO apt update
   $SUDO apt install jellyfin -y
