@@ -86,7 +86,7 @@ function install_the_things() {
   echo "::: Updating and installing necessary files"
   $SUDO apt update
   $SUDO apt upgrade -y
-  $SUDO apt install -y wget git
+  $SUDO apt install -y wget git apt-transport-https
   echo "::: DONE installing all the things!"
 }
 
@@ -95,9 +95,11 @@ function install_jellyfin() {
   echo ":::"
   echo "::: Installing Jellyfin"
   echo "deb [arch=armhf] https://repo.jellyfin.org/debian $( lsb_release -c -s ) main" | sudo tee /etc/apt/sources.list.d/jellyfin.list
+  wget -O - https://repo.jellyfin.org/debian/jellyfin_team.gpg.key | sudo apt-key add -
   $SUDO apt update
-  $SUDO apt install jellyfin
-  $SUDO usermod -aG video jellyfin sudo systemctl restart jellyfin
+  $SUDO apt install jellyfin -y
+  $SUDO usermod -aG video jellyfin
+  $SUDO systemctl restart jellyfin
   echo ":::"
   echo "::: DONE!"
 }
